@@ -11,12 +11,11 @@ public class Pong implements Game, Keyboard.Listener {
 
     @Override
     public void init() {
-        log().debug("here");
         GroupLayer g = graphics().createGroupLayer();
         ball = new Ball(g, graphics().width()/2, graphics().height()/2);
         paddleOne = new Paddle(g, graphics().width() - 25, graphics().height() / 2f);
         paddleTwo = new Paddle(g, 25, graphics().height() / 2f);
-        paddleTwo.setPlayerOne(false);
+        
         // create and add background image layer
         Image bgImage = assets().getImage("images/bg.png");
         ImageLayer bgLayer = graphics().createImageLayer(bgImage);

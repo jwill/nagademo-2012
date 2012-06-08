@@ -54,17 +54,6 @@ public class Paddle {
     public float getY() { return this.layer.transform().ty(); };
 
     public void update(float delta) {
-        // Check collisions and update accordingly
-
-
-    }
-
-
-    public boolean isPlayerOne() {
-        return isPlayerOne;
-    }
-
-    public void setPlayerOne(boolean playerOne) {
-        isPlayerOne = playerOne;
+    
     }
 }

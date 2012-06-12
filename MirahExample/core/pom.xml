@@ -27,6 +27,16 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
       </plugin>
+			<plugin>
+				<groupId>org.mirah.maven</groupId>
+				<artifactId>maven-mirah-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals><goal>compile</goal></goals>
+					</execution>
+				</executions>
+			</plugin>
     </plugins>
 
     <resources>

@@ -16,6 +16,8 @@ public class VideoPoker implements Game {
     Deck d = new Deck(1);
     Card c = d.dealCard();
     log().debug(c.toString());
+    ImageLayer layer = c.getBackLayer();
+    graphics().rootLayer().add(layer);
   }
 
   @Override

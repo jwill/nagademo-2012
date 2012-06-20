@@ -20,6 +20,7 @@ public class Card {
       Card.masterCardBack.addCallback(new ResourceCallback<Image>() {
         @Override
         public void done(Image image) {
+          log().debug("loaded");
         }
 
         @Override
@@ -35,5 +36,13 @@ public class Card {
     // load front of card
     String filename = "images/"+this.ordinal+"_"+this.suit+".png";
     cardFront = assets().getImage(filename);
+  }
+
+  ImageLayer getFrontLayer() {
+    return graphics().createImageLayer(cardFront);
+  }
+
+  ImageLayer getBackLayer() {
+    return graphics().createImageLayer(cardBack);
   }
 }

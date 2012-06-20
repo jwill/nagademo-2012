@@ -32,7 +32,11 @@
       <artifactId>playn-html</artifactId>
       <version>${playn.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava-gwt</artifactId>
+      <version>10.0.1</version>
+    </dependency>
     <!-- Start Google App Engine dependencies -->
     <!-- These can be removed if you don't wish to deploy to Google App Engine -->
     <dependency>

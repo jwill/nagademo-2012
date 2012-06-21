@@ -1,5 +1,6 @@
 package com.html5gamebook.core;
 
+import java.util.*;
 import playn.core.*;
 import static playn.core.PlayN.*;
 
@@ -7,7 +8,9 @@ public class Card {
   static Image masterCardBack;
   String suit, ordinal;
   final Image cardFront, cardBack;
+  ImageLayer frontLayer, backLayer;
   int value; 
+  HashMap data = new HashMap();
 
   public Card(String ordinal, int value, String suit) {
     this.ordinal = ordinal;
@@ -21,6 +24,7 @@ public class Card {
         @Override
         public void done(Image image) {
           log().debug("loaded");
+          
         }
 
         @Override
@@ -38,11 +42,41 @@ public class Card {
     cardFront = assets().getImage(filename);
   }
 
+  String getOrdinal() {
+    return ordinal;
+  }
+
+  int getValue() {
+    return value;
+  }
+
+  String getSuit() {
+    return suit;
+  }
+
+  @Override
+  public String toString() {
+    return "Card:"+this.ordinal+"-"+this.suit;
+  }
+
   ImageLayer getFrontLayer() {
-    return graphics().createImageLayer(cardFront);
+    if (frontLayer == null)
+      frontLayer = graphics().createImageLayer(cardFront);
+    return frontLayer;
   }
 
   ImageLayer getBackLayer() {
-    return graphics().createImageLayer(cardBack);
+    if (backLayer == null)
+      backLayer = graphics().createImageLayer(cardBack);
+    return backLayer;
+  }
+
+  void trashCard() {
+    graphics().rootLayer().remove(frontLayer);
+    graphics().rootLayer().remove(backLayer);
+  }
+
+  void flipCard() {
+
   }
 }

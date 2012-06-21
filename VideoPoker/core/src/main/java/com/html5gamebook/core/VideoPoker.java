@@ -14,10 +14,16 @@ public class VideoPoker implements Game {
     ImageLayer bgLayer = graphics().createImageLayer(bgImage);
     graphics().rootLayer().add(bgLayer);
     Deck d = new Deck(1);
-    Card c = d.dealCard();
-    log().debug(c.toString());
-    ImageLayer layer = c.getBackLayer();
-    graphics().rootLayer().add(layer);
+    Hand h = new Hand();
+    Evaluator evaluator = new Evaluator();
+    for (int i=0; i<5; i++) {
+      Card c = d.dealCard();
+      log().debug(c.toString());
+      h.addToHand(c);
+    }
+    evaluator.evaluate(h);
+    //ImageLayer layer = c.getBackLayer();
+    //graphics().rootLayer().add(layer);
   }
 
   @Override

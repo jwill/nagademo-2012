@@ -69,9 +69,10 @@ public class Evaluator {
     labels.put("RoyalFlush", "Royal Flush");
   }
 
-  public void evaluate(Hand hand) {
+  public Object[] evaluate(Hand hand) {
     int currentValue = 0;
     ArrayList<String> labels = new ArrayList<String>();
+    ArrayList<Integer> values = new ArrayList();
     labels.add(checkFlush(hand));
     labels.add(checkFourKind(hand));
     labels.add(checkFullHouse(hand));
@@ -81,7 +82,16 @@ public class Evaluator {
     labels.add(checkJacksOrBetter(hand));
     // Remove nulls
     labels.removeAll(Collections.singleton(null));
-    log().debug(labels.toString());
+    // Get payouts
+    for (String label:labels) {
+      values.add(basePayouts.get(label));
+    }
+     log().debug(labels.toString());
+    log().debug(values.toString());
+    if (labels.size() > 0) {
+      return new Object[] {labels.get(0), values.get(0)};
+    }
+    return null;
   }
 
   ArrayList checkSize(HashMap map, Integer i) {
@@ -142,7 +152,7 @@ public class Evaluator {
     if (pairs != null) {
       for (Object pp : pairs) {
         String p = (String)pp;
-        if (p.equals("1") || p.compareTo("10") == 1 )
+        if (p.equals("1") || p.equals("jack") || p.equals("queen") || p.equals("king") )
           return "JacksOrBetter";
       }
     }

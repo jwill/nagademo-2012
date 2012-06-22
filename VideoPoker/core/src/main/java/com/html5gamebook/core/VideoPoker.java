@@ -9,6 +9,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
   Evaluator evaluator;
   int roundState = 0;
   // Might retrieve from web service in the future
+  int tokens = 500, maxBet = 5, currentBet = 1;
   @Override
   public void init() {
     // create and add background image layer
@@ -35,15 +36,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
     Key key = event.key();
     switch (key) {
       case D:
-         deal();
-        /* hand.clearCards();
-         for (int i=0; i<5; i++) {
-            Card c = d.dealCard();
-            log().debug(c.toString());
-            hand.addToHand(c);
-        }
-        evaluator.evaluate(hand);*/
-      break;
+        deal();
+        break;
       case P:
         hand.printHand();
       break;
@@ -105,14 +99,22 @@ public class VideoPoker implements Game, Keyboard.Listener {
       roundState = 0;
     }
     if (roundState == 0) {
-      
+      tokens -= currentBet;
+      // Update label
     }
     dealHand();
     // TODO Update shown cards
     hand.printHand();
-    evaluator.evaluate(hand);
+    Object[] winnings = evaluator.evaluate(hand);
     if (roundState == 1) {
       // Award winning hand
+      if (winnings != null) {
+        tokens += (((Integer)winnings[1]) * currentBet);
+        // TODO Update label
+        // Play sound
+        log().debug("Won.");
+        log().debug(tokens +" tokens.");
+      }
     }
     roundState++;
   }

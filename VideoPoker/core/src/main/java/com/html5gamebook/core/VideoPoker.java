@@ -19,12 +19,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
     deck = new Deck(1);
     hand = new Hand();
     evaluator = new Evaluator();
-    for (int i=0; i<5; i++) {
-      Card c = deck.dealCard();
-      log().debug(c.toString());
-      hand.addToHand(c);
-    }
-    evaluator.evaluate(hand);
     //ImageLayer layer = c.getBackLayer();
     //graphics().rootLayer().add(layer);
     //
@@ -62,7 +56,13 @@ public class VideoPoker implements Game, Keyboard.Listener {
         hand.getCards().get(4).toggleState();
         log().debug(key.toString());
         break;
-
+      // Increment and decrement bet
+      case EQUALS:
+        incrementBet();
+        break;
+      case MINUS:
+        decrementBet();
+        break;
     }
   }
 
@@ -109,10 +109,11 @@ public class VideoPoker implements Game, Keyboard.Listener {
     if (roundState == 1) {
       // Award winning hand
       if (winnings != null) {
-        tokens += (((Integer)winnings[1]) * currentBet);
+        int tokensWon = (((Integer)winnings[1]) * currentBet);
+        tokens += tokensWon;
         // TODO Update label
         // Play sound
-        log().debug("Won.");
+        log().debug("Won "+ tokensWon);
         log().debug(tokens +" tokens.");
       }
     }
@@ -125,4 +126,24 @@ public class VideoPoker implements Game, Keyboard.Listener {
       hand.addToHand(deck.dealCard());
     }
   }
+
+  void incrementBet() {
+    if (roundState != 1) {
+      currentBet++;
+      if (currentBet > maxBet) currentBet = 1;
+      // TODO Set bet label
+      // TODO Update payout pane
+      log().debug("Current Bet: "+currentBet);
+    }
+  }
+
+  void decrementBet() {
+    if (roundState != 1) {
+      if (currentBet > 1) currentBet--;
+      // TODO Set bet label
+      // TODO Update payout pane
+      log().debug("Current Bet: "+currentBet);
+    }
+  }
+
 }

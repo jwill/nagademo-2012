@@ -1,6 +1,8 @@
 package com.html5gamebook.core;
 
 import java.util.*;
+import static playn.core.PlayN.*;
+
 
 public class Hand {
   private ArrayList<Card> cards;
@@ -65,10 +67,18 @@ public class Hand {
     }
   }
 
-  public void clearCards() {
-    for(Card card : cards) {
-      card.trashCard();
+  void printHand() {
+    log().debug("---------");
+    for (Card c : cards) {
+      log().debug(c.toString());
     }
+    log().debug("---------");
+  }
+
+  public void clearCards() {
+  //  for(Card card : cards) {
+  //    card.trashCard();
+  //  }
     cards.clear();
     pos = 0;
   }

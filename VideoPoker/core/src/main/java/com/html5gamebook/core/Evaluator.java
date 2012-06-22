@@ -71,14 +71,17 @@ public class Evaluator {
 
   public void evaluate(Hand hand) {
     int currentValue = 0;
-    String b = checkFourKind(hand);
-    String c = checkFullHouse(hand);
-    String f = checkTwoPair(hand); 
-    String g = checkJacksOrBetter(hand);
-    log().debug(b);
-    log().debug(c);
-    log().debug(f);
-    log().debug(g);
+    ArrayList<String> labels = new ArrayList<String>();
+    labels.add(checkFlush(hand));
+    labels.add(checkFourKind(hand));
+    labels.add(checkFullHouse(hand));
+    labels.add(checkThreeKind(hand));
+    labels.add(checkStraight(hand));
+    labels.add(checkTwoPair(hand)); 
+    labels.add(checkJacksOrBetter(hand));
+    // Remove nulls
+    labels.removeAll(Collections.singleton(null));
+    log().debug(labels.toString());
   }
 
   ArrayList checkSize(HashMap map, Integer i) {
@@ -146,4 +149,58 @@ public class Evaluator {
     return null;
   }
 
+  String checkStraight(Hand hand) {
+    ArrayList values = new ArrayList<Integer>();
+    for (Card card : hand.getCards()) {
+      Integer val = card.getValue();
+      values.add(val);
+    }
+    Collections.sort(values);
+    if (values.toArray() == new Object[]{1, 10, 11, 12, 13})
+      return "Straight";
+
+    Integer startValue = (Integer)values.get(0);
+    for (int i = 0; i<5 ; i++) {
+      Integer currentValue = (Integer)values.get(i);
+      if ((startValue + i) != currentValue)
+        return null;
+    }
+    return "Straight";
+  }
+  
+  String checkStraightFlush(Hand hand) {
+    String straight = checkStraight(hand);
+    if (!straight.equals(null)) {
+      HashMap suits = suitHandler(hand.getCards());
+      if (suits.size() == 0)
+        return "StraightFlush";
+      else return "Straight";
+    }
+    return null;
+  }
+
+  String checkRoyalFlush(Hand hand) {
+    ArrayList values = new ArrayList<Integer>();
+    for (Card card : hand.getCards()) {
+      Integer val = card.getValue();
+      values.add(val);
+    }
+    Collections.sort(values);
+    if (values.toArray() == new Object[]{1, 10, 11, 12, 13})
+      return "RoyalFlush";
+    else return null;
+
+  }
+
+  String checkFlush(Hand hand) {
+    HashMap suits = suitHandler(hand.getCards());
+    if (suits.size() == 0) {
+      String royal = checkRoyalFlush(hand);
+      String straightFlush = checkStraightFlush(hand);
+      if (!royal.equals(null)) return royal;
+      if (!straightFlush.equals(null)) return straightFlush;
+      return "Flush";
+    }
+    return null;
+  }
 }

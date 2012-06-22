@@ -54,9 +54,14 @@ public class Card {
     return suit;
   }
 
+  void toggleState() {
+    boolean state = (Boolean)data.get("state");
+    data.put("state", !state);
+  }
+
   @Override
   public String toString() {
-    return "Card:"+this.ordinal+"-"+this.suit;
+    return "Card:"+this.ordinal+"-"+this.suit+"-"+data.get("state");
   }
 
   ImageLayer getFrontLayer() {

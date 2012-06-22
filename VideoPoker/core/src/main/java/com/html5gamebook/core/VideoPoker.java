@@ -1,30 +1,88 @@
 package com.html5gamebook.core;
 
+import playn.core.*;
 import static playn.core.PlayN.*;
 
-import playn.core.Game;
-import playn.core.Image;
-import playn.core.ImageLayer;
-
-public class VideoPoker implements Game {
+public class VideoPoker implements Game, Keyboard.Listener {
+  Hand hand;
+  Deck deck;
+  Evaluator evaluator;
+  int roundState = 0;
+  // Might retrieve from web service in the future
   @Override
   public void init() {
     // create and add background image layer
     Image bgImage = assets().getImage("images/bg.png");
     ImageLayer bgLayer = graphics().createImageLayer(bgImage);
     graphics().rootLayer().add(bgLayer);
-    Deck d = new Deck(1);
-    Hand h = new Hand();
-    Evaluator evaluator = new Evaluator();
+    deck = new Deck(1);
+    hand = new Hand();
+    evaluator = new Evaluator();
     for (int i=0; i<5; i++) {
-      Card c = d.dealCard();
+      Card c = deck.dealCard();
       log().debug(c.toString());
-      h.addToHand(c);
+      hand.addToHand(c);
     }
-    evaluator.evaluate(h);
+    evaluator.evaluate(hand);
     //ImageLayer layer = c.getBackLayer();
     //graphics().rootLayer().add(layer);
+    //
+    keyboard().setListener(this);
   }
+  
+  @Override
+  public void onKeyDown(Keyboard.Event event) {
+    Key key = event.key();
+    switch (key) {
+      case D:
+         deal();
+        /* hand.clearCards();
+         for (int i=0; i<5; i++) {
+            Card c = d.dealCard();
+            log().debug(c.toString());
+            hand.addToHand(c);
+        }
+        evaluator.evaluate(hand);*/
+      break;
+      case P:
+        hand.printHand();
+      break;
+      // Toggle held cards
+      case K1:
+        hand.getCards().get(0).toggleState();
+        log().debug(key.toString());
+        break;
+      case K2:
+        hand.getCards().get(1).toggleState();
+        log().debug(key.toString());
+        break;
+      case K3:
+        hand.getCards().get(2).toggleState();
+        log().debug(key.toString());
+        break;
+      case K4:
+        hand.getCards().get(3).toggleState();
+        log().debug(key.toString());
+        break;
+      case K5:
+        hand.getCards().get(4).toggleState();
+        log().debug(key.toString());
+        break;
+
+    }
+  }
+
+  
+    @Override
+    public void onKeyTyped(Keyboard.TypedEvent event) {
+        // Does nothing.
+    }
+
+    @Override
+    public void onKeyUp(Keyboard.Event event) {
+        // Does nothing.
+    }
+
 
   @Override
   public void paint(float alpha) {
@@ -38,5 +96,31 @@ public class VideoPoker implements Game {
   @Override
   public int updateRate() {
     return 25;
+  }
+
+  void deal() {
+    // Round is over
+    if (roundState == 2) {
+      hand.clearCards();
+      roundState = 0;
+    }
+    if (roundState == 0) {
+      
+    }
+    dealHand();
+    // TODO Update shown cards
+    hand.printHand();
+    evaluator.evaluate(hand);
+    if (roundState == 1) {
+      // Award winning hand
+    }
+    roundState++;
+  }
+
+  void dealHand() {
+    int numCards = hand.cardsNeeded();
+    for (int i = 0; i<numCards; i++) {
+      hand.addToHand(deck.dealCard());
+    }
   }
 }

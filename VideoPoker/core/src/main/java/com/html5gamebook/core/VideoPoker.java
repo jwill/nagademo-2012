@@ -15,6 +15,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
   int roundState = 2;
   GroupLayer layer;
   Sound winningSound;
+  Layer messageLayer;
 
   // Might retrieve from web service in the future
   int tokens = 500, maxBet = 5, currentBet = 1;
@@ -120,6 +121,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
     // Round is over
     if (roundState == 2) {
       hand.clearCards();
+      if (messageLayer != null)
+        messageLayer.setAlpha(0.0f);
       roundState = 0;
     }
     if (roundState == 0) {
@@ -142,6 +145,10 @@ public class VideoPoker implements Game, Keyboard.Listener {
         // Play sound
         log().debug("Won "+ tokensWon);
         log().debug(tokens +" tokens.");
+        messageLayer = createMessageText("Won "+tokensWon, 36, 0x0000FF00);
+        messageLayer.setTranslation(graphics().width()/2, graphics().height()/2-100);
+        graphics().rootLayer().add(messageLayer);
+
       }
     }
     roundState++;
@@ -179,12 +186,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
   void drawDesktopInterface() {
     log().debug(platformType().toString());
 
-    
-    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 16);
-    String text = "blah blah blah";
-    TextLayout layout = graphics().layoutText(
-      text, new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
-    Layer textLayer = createTextLayer(layout);
+    Layer textLayer = createMessageText("blah blah blah", 16, null);
+
     textLayer.setTranslation(100,100);
     graphics().rootLayer().add(textLayer);
 
@@ -198,6 +201,16 @@ public class VideoPoker implements Game, Keyboard.Listener {
   void drawAndroidInterface() {
     log().debug(platformType().toString());
 
+  }
+
+  Layer createMessageText(String text, int fontSize, Integer fontColor) {
+    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, fontSize);
+    if (fontColor == null)
+      fontColor = 0xFF660000;
+    TextLayout layout = graphics().layoutText(
+      text, new TextFormat().withFont(font).withWrapWidth(200).withTextColor(fontColor));
+    Layer textLayer = createTextLayer(layout);
+    return textLayer;
   }
 
   protected Layer createTextLayer(TextLayout layout) {

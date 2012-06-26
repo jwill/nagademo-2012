@@ -1,16 +1,13 @@
 package com.html5gamebook.core;
 
 import java.util.*;
-import com.google.common.base.Function;
-import com.google.common.collect.Multimap;
 
 import static playn.core.PlayN.*;
 
 public class Evaluator {
   HashMap <String,Integer> basePayouts;
   HashMap <String,String> labels;
-  Function<Card,Integer> ordinalHandler;
-  Function<Card,String> suitHandler;
+
   public Evaluator() {
     initMaps();
   }

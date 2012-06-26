@@ -1,27 +1,50 @@
 package com.html5gamebook.core;
 
 import playn.core.*;
+import java.util.*;
 import static playn.core.PlayN.*;
+import static playn.core.Platform.Type.*;
+
+
+
 
 public class VideoPoker implements Game, Keyboard.Listener {
   Hand hand;
   Deck deck;
   Evaluator evaluator;
-  int roundState = 0;
+  int roundState = 2;
+  GroupLayer layer;
+  Sound winningSound;
+
   // Might retrieve from web service in the future
   int tokens = 500, maxBet = 5, currentBet = 1;
   @Override
   public void init() {
     // create and add background image layer
-    Image bgImage = assets().getImage("images/bg.png");
+    graphics().setSize(1024,768);
+    Image bgImage = assets().getImage("images/background.png");
     ImageLayer bgLayer = graphics().createImageLayer(bgImage);
     graphics().rootLayer().add(bgLayer);
+
     deck = new Deck(1);
     hand = new Hand();
     evaluator = new Evaluator();
-    //ImageLayer layer = c.getBackLayer();
-    //graphics().rootLayer().add(layer);
-    //
+    
+     // For text
+    layer = graphics().createGroupLayer();
+    graphics().rootLayer().add(layer);
+
+
+    // Deal throwaway hand 
+    // in order to show card back images
+    ArrayList<Card> cards = deck.dealCards(5);
+    for(Card c : cards) {
+      hand.addToHand(c);
+    }
+    hand.drawCards();
+
+       
+    doLayout();
     keyboard().setListener(this);
   }
   
@@ -34,6 +57,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
         break;
       case P:
         hand.printHand();
+        hand.drawCards();
       break;
       // Toggle held cards
       case K1:
@@ -60,8 +84,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
       case EQUALS:
         incrementBet();
         break;
-      case MINUS:
-        decrementBet();
+      case W:
+        winningSound.play();
         break;
     }
   }
@@ -81,11 +105,11 @@ public class VideoPoker implements Game, Keyboard.Listener {
   @Override
   public void paint(float alpha) {
     // the background automatically paints itself, so no need to do anything here!
-  }
+     }
 
   @Override
   public void update(float delta) {
-  }
+     }
 
   @Override
   public int updateRate() {
@@ -103,8 +127,11 @@ public class VideoPoker implements Game, Keyboard.Listener {
       // Update label
     }
     dealHand();
+    hand.drawCards();
+
     // TODO Update shown cards
     hand.printHand();
+    hand.flipCards();
     Object[] winnings = evaluator.evaluate(hand);
     if (roundState == 1) {
       // Award winning hand
@@ -137,13 +164,47 @@ public class VideoPoker implements Game, Keyboard.Listener {
     }
   }
 
-  void decrementBet() {
-    if (roundState != 1) {
-      if (currentBet > 1) currentBet--;
-      // TODO Set bet label
-      // TODO Update payout pane
-      log().debug("Current Bet: "+currentBet);
+  void doLayout () {
+    // Possibly move this to a service class later
+    switch (platformType()) {
+      case JAVA:case HTML:
+        drawDesktopInterface();
+        break;
+      case ANDROID:
+        drawAndroidInterface();
+        break;
     }
+  }
+
+  void drawDesktopInterface() {
+    log().debug(platformType().toString());
+
+    
+    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 16);
+    String text = "blah blah blah";
+    TextLayout layout = graphics().layoutText(
+      text, new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
+    Layer textLayer = createTextLayer(layout);
+    textLayer.setTranslation(100,100);
+    graphics().rootLayer().add(textLayer);
+
+  //  Root root = iface.createRoot(AxisLayout.vertical().gap(15), SimpleStyles.newSheet());
+  //  root.setSize(graphics().width(), graphics().height());
+  //  root.addStyles(Style.BACKGROUND.is(Background.solid(0x009900).inset(5)));
+  //  layer.add(root.layer);
+    
+  }
+
+  void drawAndroidInterface() {
+    log().debug(platformType().toString());
+
+  }
+
+  protected Layer createTextLayer(TextLayout layout) {
+    CanvasImage image = graphics().createImage((int)Math.ceil(layout.width()),
+                                               (int)Math.ceil(layout.height()));
+    image.canvas().fillText(layout, 0, 0);
+    return graphics().createImageLayer(image);
   }
 
 }

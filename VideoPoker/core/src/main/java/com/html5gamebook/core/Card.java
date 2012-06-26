@@ -9,7 +9,9 @@ public class Card {
   String suit, ordinal;
   final Image cardFront, cardBack;
   ImageLayer frontLayer, backLayer;
-  int value; 
+  int value;
+  boolean frontShown = false;
+  float xPos = 0f, yPos = 0.0f;
   HashMap data = new HashMap();
 
   public Card(String ordinal, int value, String suit) {
@@ -57,6 +59,12 @@ public class Card {
   void toggleState() {
     boolean state = (Boolean)data.get("state");
     data.put("state", !state);
+    log().debug(this.toString() + " " + !state);
+  }
+
+  int positionInHand() {
+    int pos = (Integer)data.get("positionInHand");
+    return pos;
   }
 
   @Override
@@ -65,8 +73,18 @@ public class Card {
   }
 
   ImageLayer getFrontLayer() {
-    if (frontLayer == null)
+    if (frontLayer == null) {
       frontLayer = graphics().createImageLayer(cardFront);
+      frontLayer.setInteractive(true);
+      frontLayer.addListener(new Mouse.Adapter() {
+        @Override
+        public void onMouseDown(Mouse.ButtonEvent evt) {
+          log().debug("Mouse clicked");
+          toggleState();
+        }
+      });
+      
+    }
     return frontLayer;
   }
 
@@ -76,12 +94,37 @@ public class Card {
     return backLayer;
   }
 
+  void drawCard() {
+    graphics().rootLayer().add(getFrontLayer());
+    graphics().rootLayer().add(getBackLayer());
+
+    
+    log().debug("x: "+findXPos());
+    getFrontLayer().setTranslation(findXPos(), 400);
+    getBackLayer().setTranslation(findXPos(), 400);
+
+  }
+
+  int findXPos() {
+    return 10 + (positionInHand() * 189);
+  }
+
   void trashCard() {
     graphics().rootLayer().remove(frontLayer);
     graphics().rootLayer().remove(backLayer);
   }
 
   void flipCard() {
+  //  if (((Boolean)data.get("hidden")) == true)
+  //    return;
 
+    frontShown = !frontShown;
+    if (frontShown) {
+      getFrontLayer().setAlpha(1.0f);
+      getBackLayer().setAlpha(0.0f);
+    } else {
+      getFrontLayer().setAlpha(0.0f);
+      getBackLayer().setAlpha(1.0f);
+    }
   }
 }

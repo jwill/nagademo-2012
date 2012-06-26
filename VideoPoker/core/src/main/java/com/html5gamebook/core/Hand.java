@@ -45,8 +45,7 @@ public class Hand {
 
   public void flipCards() {
     for (Card card : cards) {
-      Boolean frontShown = (Boolean)card.data.get("frontShown");
-      if (frontShown != true) 
+      if (card.frontShown != true) 
         card.flipCard();
     }
   }
@@ -73,6 +72,12 @@ public class Hand {
       log().debug(c.toString());
     }
     log().debug("---------");
+  }
+
+  void drawCards() {
+    for (Card card: cards) {
+      card.drawCard();
+    }
   }
 
   public void clearCards() {

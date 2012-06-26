@@ -11,6 +11,7 @@ public class Card {
   ImageLayer frontLayer, backLayer;
   int value;
   boolean frontShown = false;
+  Layer heldLayer;
   float xPos = 0f, yPos = 0.0f;
   HashMap data = new HashMap();
 
@@ -60,6 +61,9 @@ public class Card {
     boolean state = (Boolean)data.get("state");
     data.put("state", !state);
     log().debug(this.toString() + " " + !state);
+    if (!state == true)
+    heldLayer.setAlpha(1.0f);
+    else heldLayer.setAlpha(0.0f);
   }
 
   int positionInHand() {
@@ -94,12 +98,27 @@ public class Card {
     return backLayer;
   }
 
+  Layer getHeldLayer() {
+    if (heldLayer == null) {
+    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 16);
+      
+      TextLayout layout = graphics().layoutText(
+      "HELD", new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
+      heldLayer = createTextLayer(layout);
+      heldLayer.setAlpha(0.0f);
+    }
+    return heldLayer;
+  }
+
   void drawCard() {
     graphics().rootLayer().add(getFrontLayer());
     graphics().rootLayer().add(getBackLayer());
+    graphics().rootLayer().add(getHeldLayer());
 
     
     log().debug("x: "+findXPos());
+    
+    getHeldLayer().setTranslation(findXPos()+50, 360);
     getFrontLayer().setTranslation(findXPos(), 400);
     getBackLayer().setTranslation(findXPos(), 400);
 
@@ -110,6 +129,7 @@ public class Card {
   }
 
   void trashCard() {
+    graphics().rootLayer().remove(heldLayer);
     graphics().rootLayer().remove(frontLayer);
     graphics().rootLayer().remove(backLayer);
   }
@@ -127,4 +147,15 @@ public class Card {
       getBackLayer().setAlpha(1.0f);
     }
   }
+
+
+
+  
+  protected Layer createTextLayer(TextLayout layout) {
+    CanvasImage image = graphics().createImage((int)Math.ceil(layout.width()),
+                                               (int)Math.ceil(layout.height()));
+    image.canvas().fillText(layout, 0, 0);
+    return graphics().createImageLayer(image);
+  }
+
 }

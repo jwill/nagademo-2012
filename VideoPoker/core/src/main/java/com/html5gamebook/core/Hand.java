@@ -81,9 +81,9 @@ public class Hand {
   }
 
   public void clearCards() {
-  //  for(Card card : cards) {
-  //    card.trashCard();
-  //  }
+    for(Card card : cards) {
+      card.trashCard();
+    }
     cards.clear();
     pos = 0;
   }

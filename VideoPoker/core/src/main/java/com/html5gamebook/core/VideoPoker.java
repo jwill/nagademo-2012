@@ -16,14 +16,15 @@ public class VideoPoker implements Game, Keyboard.Listener {
   GroupLayer layer;
   Sound winningSound;
   Layer messageLayer, labelsLayer;
-  Layer bet1Layer, bet2Layer, bet3Layer, bet4Layer, bet5Layer;
+  Layer betButton, dealButton, betLabel, tokensLabel;
+
 
   // Might retrieve from web service in the future
   int tokens = 500, maxBet = 5, currentBet = 1;
   @Override
   public void init() {
     // create and add background image layer
-    graphics().setSize(1024,768);
+    graphics().setSize(1024,600);
     Image bgImage = assets().getImage("images/background.png");
     ImageLayer bgLayer = graphics().createImageLayer(bgImage);
     graphics().rootLayer().add(bgLayer);
@@ -46,6 +47,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
     hand.drawCards();
 
     printPayTable();
+    createButtons();
+    drawBetAndTokens();
     doLayout();
     keyboard().setListener(this);
   }
@@ -129,6 +132,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
     if (roundState == 0) {
       tokens -= currentBet;
       // Update label
+      drawBetAndTokens();
     }
     dealHand();
     hand.drawCards();
@@ -146,8 +150,9 @@ public class VideoPoker implements Game, Keyboard.Listener {
         // Play sound
         log().debug("Won "+ tokensWon);
         log().debug(tokens +" tokens.");
-        messageLayer = createMessageText("Won "+tokensWon, 36, 0x0000FF00);
-        messageLayer.setTranslation(graphics().width()/2, graphics().height()/2-100);
+        drawBetAndTokens();
+        messageLayer = createMessageText("Won "+tokensWon, 36, 0x0000FFFF);
+        messageLayer.setTranslation(graphics().width()/2, graphics().height()/2-50);
         graphics().rootLayer().add(messageLayer);
 
       }
@@ -166,9 +171,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
     if (roundState != 1) {
       currentBet++;
       if (currentBet > maxBet) currentBet = 1;
-      // TODO Set bet label
-      // TODO Update payout pane
       log().debug("Current Bet: "+currentBet);
+      drawBetAndTokens();
     }
   }
 
@@ -186,17 +190,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
 
   void drawDesktopInterface() {
     log().debug(platformType().toString());
-
-    Layer textLayer = createMessageText("blah blah blah", 16, null);
-
-    textLayer.setTranslation(100,100);
-    graphics().rootLayer().add(textLayer);
-
-  //  Root root = iface.createRoot(AxisLayout.vertical().gap(15), SimpleStyles.newSheet());
-  //  root.setSize(graphics().width(), graphics().height());
-  //  root.addStyles(Style.BACKGROUND.is(Background.solid(0x009900).inset(5)));
-  //  layer.add(root.layer);
-    
   }
 
   void drawAndroidInterface() {
@@ -225,6 +218,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
     String labels = "Royal Flush \n Straight Flush \n Four of a Kind \n Full House \n "+
       "Flush \n Straight \n Three of a Kind \n Two Pair \n Jacks Or Better";
     labelsLayer = createMessageText(labels, 24, null);
+    labelsLayer.setTranslation(10,0);
 
     ArrayList payouts = new ArrayList(evaluator.getBasePayouts().values());
     Collections.sort(payouts);
@@ -238,16 +232,61 @@ public class VideoPoker implements Game, Keyboard.Listener {
         out.append(temp.toString());
         out.append(" \n ");
       }
-      out.toString();
       Layer layer = createMessageText(out.toString(), 24, null);
       layer.setTranslation(250+(i*75),0);
       graphics().rootLayer().add(layer);
 
     }
 
-    log().debug(payouts.toString());
-
     graphics().rootLayer().add(labelsLayer);
-   // graphics().rootLayer().add(bet1Layer);
+
+    
+  }
+
+  void drawBetAndTokens() {
+     try{ 
+       graphics().rootLayer().remove(betLabel);
+       graphics().rootLayer().remove(tokensLabel);
+     } catch (Exception ex) {}
+    
+     betLabel = createMessageText("Bet: "+currentBet, 28, null);
+     tokensLabel = createMessageText("Tokens: "+tokens, 28, null);
+
+     betLabel.setTranslation(700,0);
+     tokensLabel.setTranslation(700,50);
+
+     graphics().rootLayer().add(betLabel);
+     graphics().rootLayer().add(tokensLabel);
+
+  }
+
+  void createButtons() {
+    Image betImage = assets().getImage("images/bet.png");
+    Image dealImage = assets().getImage("images/deal.png");
+    
+     betButton = graphics().createImageLayer(betImage);
+     betButton.setTranslation(570,125);
+        graphics().rootLayer().add(betButton);
+      dealButton = graphics().createImageLayer(dealImage);
+      dealButton.setTranslation(745,125);
+        graphics().rootLayer().add(dealButton);
+
+      betButton.addListener(new Pointer.Adapter() {
+        @Override
+        public void onPointerStart(Pointer.Event evt) {
+          log().debug("bet");
+          incrementBet();
+        }
+      });
+
+        
+      dealButton.addListener(new Pointer.Adapter() {
+        @Override
+        public void onPointerStart(Pointer.Event evt) {
+          log().debug("deal");
+          deal();
+        }
+      });
+
   }
 }

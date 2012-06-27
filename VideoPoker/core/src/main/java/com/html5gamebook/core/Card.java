@@ -103,7 +103,7 @@ public class Card {
 
   Layer getHeldLayer() {
     if (heldLayer == null) {
-    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 16);
+    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 24);
       
       TextLayout layout = graphics().layoutText(
       "HELD", new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
@@ -121,14 +121,14 @@ public class Card {
     
     log().debug("x: "+findXPos());
     
-    getHeldLayer().setTranslation(findXPos()+50, 360);
-    getFrontLayer().setTranslation(findXPos(), 400);
-    getBackLayer().setTranslation(findXPos(), 400);
+    getHeldLayer().setTranslation(findXPos()+50, 300);
+    getFrontLayer().setTranslation(findXPos(), 340);
+    getBackLayer().setTranslation(findXPos(), 340);
 
   }
 
   int findXPos() {
-    return 10 + (positionInHand() * 189);
+    return 20 + (positionInHand() * 189);
   }
 
   void trashCard() {

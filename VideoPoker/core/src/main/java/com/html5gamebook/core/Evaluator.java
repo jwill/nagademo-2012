@@ -210,4 +210,8 @@ public class Evaluator {
     }
     return null;
   }
+
+  public HashMap getBasePayouts() {
+    return basePayouts;
+  }
 }

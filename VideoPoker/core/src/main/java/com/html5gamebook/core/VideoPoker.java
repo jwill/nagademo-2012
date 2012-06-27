@@ -15,7 +15,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
   int roundState = 2;
   GroupLayer layer;
   Sound winningSound;
-  Layer messageLayer;
+  Layer messageLayer, labelsLayer;
+  Layer bet1Layer, bet2Layer, bet3Layer, bet4Layer, bet5Layer;
 
   // Might retrieve from web service in the future
   int tokens = 500, maxBet = 5, currentBet = 1;
@@ -44,7 +45,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
     }
     hand.drawCards();
 
-       
+    printPayTable();
     doLayout();
     keyboard().setListener(this);
   }
@@ -219,5 +220,34 @@ public class VideoPoker implements Game, Keyboard.Listener {
     image.canvas().fillText(layout, 0, 0);
     return graphics().createImageLayer(image);
   }
+  
+  void printPayTable () {
+    String labels = "Royal Flush \n Straight Flush \n Four of a Kind \n Full House \n "+
+      "Flush \n Straight \n Three of a Kind \n Two Pair \n Jacks Or Better";
+    labelsLayer = createMessageText(labels, 24, null);
 
+    ArrayList payouts = new ArrayList(evaluator.getBasePayouts().values());
+    Collections.sort(payouts);
+    Collections.reverse(payouts);
+    
+
+    for (int i = 0; i<5; i++) {
+      StringBuilder out = new StringBuilder();
+      for (Object o : payouts) {
+        Integer temp = (i+1)*(Integer)o;
+        out.append(temp.toString());
+        out.append(" \n ");
+      }
+      out.toString();
+      Layer layer = createMessageText(out.toString(), 24, null);
+      layer.setTranslation(250+(i*75),0);
+      graphics().rootLayer().add(layer);
+
+    }
+
+    log().debug(payouts.toString());
+
+    graphics().rootLayer().add(labelsLayer);
+   // graphics().rootLayer().add(bet1Layer);
+  }
 }

@@ -61,9 +61,12 @@ public class Card {
     boolean state = (Boolean)data.get("state");
     data.put("state", !state);
     log().debug(this.toString() + " " + !state);
-    if (!state == true)
-    heldLayer.setAlpha(1.0f);
-    else heldLayer.setAlpha(0.0f);
+    if (!state == true){
+      graphics().rootLayer().add(getHeldLayer());
+    }
+    else {
+      try{graphics().rootLayer().remove(heldLayer);}catch(Exception ex){}
+    }
   }
 
   int positionInHand() {
@@ -80,9 +83,9 @@ public class Card {
     if (frontLayer == null) {
       frontLayer = graphics().createImageLayer(cardFront);
       frontLayer.setInteractive(true);
-      frontLayer.addListener(new Mouse.Adapter() {
+      frontLayer.addListener(new Pointer.Adapter() {
         @Override
-        public void onMouseDown(Mouse.ButtonEvent evt) {
+        public void onPointerStart(Pointer.Event evt) {
           log().debug("Mouse clicked");
           toggleState();
         }
@@ -105,7 +108,7 @@ public class Card {
       TextLayout layout = graphics().layoutText(
       "HELD", new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
       heldLayer = createTextLayer(layout);
-      heldLayer.setAlpha(0.0f);
+     // heldLayer.setAlpha(1.0f);
     }
     return heldLayer;
   }
@@ -113,7 +116,7 @@ public class Card {
   void drawCard() {
     graphics().rootLayer().add(getFrontLayer());
     graphics().rootLayer().add(getBackLayer());
-    graphics().rootLayer().add(getHeldLayer());
+    //graphics().rootLayer().add(getHeldLayer());
 
     
     log().debug("x: "+findXPos());
@@ -129,9 +132,11 @@ public class Card {
   }
 
   void trashCard() {
+    try {
     graphics().rootLayer().remove(heldLayer);
     graphics().rootLayer().remove(frontLayer);
     graphics().rootLayer().remove(backLayer);
+    } catch(Exception e) {}
   }
 
   void flipCard() {

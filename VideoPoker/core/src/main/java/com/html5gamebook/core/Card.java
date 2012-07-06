@@ -60,7 +60,6 @@ public class Card {
   void toggleState() {
     boolean state = (Boolean)data.get("state");
     data.put("state", !state);
-    log().debug(this.toString() + " " + !state);
     if (!state == true){
       graphics().rootLayer().add(getHeldLayer());
     }
@@ -86,7 +85,6 @@ public class Card {
       frontLayer.addListener(new Pointer.Adapter() {
         @Override
         public void onPointerStart(Pointer.Event evt) {
-          log().debug("Mouse clicked");
           toggleState();
         }
       });
@@ -118,9 +116,7 @@ public class Card {
     graphics().rootLayer().add(getBackLayer());
     //graphics().rootLayer().add(getHeldLayer());
 
-    
-    log().debug("x: "+findXPos());
-    
+   
     getHeldLayer().setTranslation(findXPos()+50, 300);
     getFrontLayer().setTranslation(findXPos(), 340);
     getBackLayer().setTranslation(findXPos(), 340);

@@ -49,7 +49,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
     printPayTable();
     createButtons();
     drawBetAndTokens();
-    doLayout();
     keyboard().setListener(this);
   }
   
@@ -67,23 +66,18 @@ public class VideoPoker implements Game, Keyboard.Listener {
       // Toggle held cards
       case K1:
         hand.getCards().get(0).toggleState();
-        log().debug(key.toString());
         break;
       case K2:
         hand.getCards().get(1).toggleState();
-        log().debug(key.toString());
         break;
       case K3:
         hand.getCards().get(2).toggleState();
-        log().debug(key.toString());
         break;
       case K4:
         hand.getCards().get(3).toggleState();
-        log().debug(key.toString());
         break;
       case K5:
         hand.getCards().get(4).toggleState();
-        log().debug(key.toString());
         break;
       // Increment and decrement bet
       case EQUALS:
@@ -138,7 +132,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
     hand.drawCards();
 
     // TODO Update shown cards
-    hand.printHand();
+    //hand.printHand();
     hand.flipCards();
     Object[] winnings = evaluator.evaluate(hand);
     if (roundState == 1) {
@@ -148,8 +142,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
         tokens += tokensWon;
         // TODO Update label
         // Play sound
-        log().debug("Won "+ tokensWon);
-        log().debug(tokens +" tokens.");
         drawBetAndTokens();
         messageLayer = createMessageText("Won "+tokensWon, 36, 0x0000FFFF);
         messageLayer.setTranslation(graphics().width()/2, graphics().height()/2-50);
@@ -171,30 +163,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
     if (roundState != 1) {
       currentBet++;
       if (currentBet > maxBet) currentBet = 1;
-      log().debug("Current Bet: "+currentBet);
       drawBetAndTokens();
     }
-  }
-
-  void doLayout () {
-    // Possibly move this to a service class later
-    switch (platformType()) {
-      case JAVA:case HTML:
-        drawDesktopInterface();
-        break;
-      case ANDROID:
-        drawAndroidInterface();
-        break;
-    }
-  }
-
-  void drawDesktopInterface() {
-    log().debug(platformType().toString());
-  }
-
-  void drawAndroidInterface() {
-    log().debug(platformType().toString());
-
   }
 
   Layer createMessageText(String text, int fontSize, Integer fontColor) {
@@ -274,7 +244,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
       betButton.addListener(new Pointer.Adapter() {
         @Override
         public void onPointerStart(Pointer.Event evt) {
-          log().debug("bet");
           incrementBet();
         }
       });
@@ -283,7 +252,6 @@ public class VideoPoker implements Game, Keyboard.Listener {
       dealButton.addListener(new Pointer.Adapter() {
         @Override
         public void onPointerStart(Pointer.Event evt) {
-          log().debug("deal");
           deal();
         }
       });

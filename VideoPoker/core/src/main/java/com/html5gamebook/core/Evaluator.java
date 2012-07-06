@@ -83,8 +83,8 @@ public class Evaluator {
     for (String label:labels) {
       values.add(basePayouts.get(label));
     }
-     log().debug(labels.toString());
-    log().debug(values.toString());
+    // log().debug(labels.toString());
+    //log().debug(values.toString());
     if (labels.size() > 0) {
       return new Object[] {labels.get(0), values.get(0)};
     }

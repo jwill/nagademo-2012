@@ -265,10 +265,10 @@ public class VideoPoker implements Game, Keyboard.Listener {
     Image dealImage = assets().getImage("images/deal.png");
     
      betButton = graphics().createImageLayer(betImage);
-     betButton.setTranslation(570,125);
+     betButton.setTranslation(600,125);
         graphics().rootLayer().add(betButton);
       dealButton = graphics().createImageLayer(dealImage);
-      dealButton.setTranslation(745,125);
+      dealButton.setTranslation(775,125);
         graphics().rootLayer().add(dealButton);
 
       betButton.addListener(new Pointer.Adapter() {

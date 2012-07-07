@@ -143,7 +143,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
         // TODO Update label
         // Play sound
         drawBetAndTokens();
-        messageLayer = createMessageText("Won "+tokensWon, 36, 0x0000FFFF);
+        messageLayer = Util.createMessageText("Won "+tokensWon, 36, null);
         messageLayer.setTranslation(graphics().width()/2, graphics().height()/2-50);
         graphics().rootLayer().add(messageLayer);
 
@@ -167,26 +167,11 @@ public class VideoPoker implements Game, Keyboard.Listener {
     }
   }
 
-  Layer createMessageText(String text, int fontSize, Integer fontColor) {
-    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, fontSize);
-    TextLayout layout = graphics().layoutText(
-      text, new TextFormat().withFont(font).withWrapWidth(200));
-    Layer textLayer = createTextLayer(layout, fontColor);
-    return textLayer;
-  }
-
-  protected Layer createTextLayer(TextLayout layout, Integer fontColor) {
-    CanvasImage image = graphics().createImage((int)Math.ceil(layout.width()),
-                                               (int)Math.ceil(layout.height()));
-    if (fontColor != null) image.canvas().setFillColor(fontColor);
-    image.canvas().fillText(layout, 0, 0);
-    return graphics().createImageLayer(image);
-  }
-  
+    
   void printPayTable () {
     String labels = " Royal Flush \n Straight Flush \n Four of a Kind \n Full House \n "+
       "Flush \n Straight \n Three of a Kind \n Two Pair \n Jacks Or Better";
-    labelsLayer = createMessageText(labels, 24, null);
+    labelsLayer = Util.createMessageText(labels, 24, null);
     labelsLayer.setTranslation(10,0);
 
     ArrayList payouts = new ArrayList(evaluator.getBasePayouts().values());
@@ -201,7 +186,7 @@ public class VideoPoker implements Game, Keyboard.Listener {
         out.append(temp.toString());
         out.append(" \n ");
       }
-      Layer layer = createMessageText(out.toString(), 24, null);
+      Layer layer = Util.createMessageText(out.toString(), 24, null);
       layer.setTranslation(250+(i*75),0);
       graphics().rootLayer().add(layer);
 
@@ -218,8 +203,8 @@ public class VideoPoker implements Game, Keyboard.Listener {
        graphics().rootLayer().remove(tokensLabel);
      } catch (Exception ex) {}
     
-     betLabel = createMessageText("Bet: "+currentBet, 28, null);
-     tokensLabel = createMessageText("Tokens: "+tokens, 28, null);
+     betLabel = Util.createMessageText("Bet: "+currentBet, 28, null);
+     tokensLabel = Util.createMessageText("Tokens: "+tokens, 28, null);
 
      betLabel.setTranslation(700,0);
      tokensLabel.setTranslation(700,50);

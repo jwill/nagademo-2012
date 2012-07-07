@@ -101,12 +101,7 @@ public class Card {
 
   Layer getHeldLayer() {
     if (heldLayer == null) {
-    Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, 24);
-      
-      TextLayout layout = graphics().layoutText(
-      "HELD", new TextFormat().withFont(font).withWrapWidth(200).withTextColor(0xFF660000));
-      heldLayer = createTextLayer(layout);
-     // heldLayer.setAlpha(1.0f);
+      heldLayer = Util.createMessageText("HELD", 24, null);
     }
     return heldLayer;
   }
@@ -147,16 +142,6 @@ public class Card {
       getFrontLayer().setAlpha(0.0f);
       getBackLayer().setAlpha(1.0f);
     }
-  }
-
-
-
-  
-  protected Layer createTextLayer(TextLayout layout) {
-    CanvasImage image = graphics().createImage((int)Math.ceil(layout.width()),
-                                               (int)Math.ceil(layout.height()));
-    image.canvas().fillText(layout, 0, 0);
-    return graphics().createImageLayer(image);
   }
 
 }

@@ -169,23 +169,22 @@ public class VideoPoker implements Game, Keyboard.Listener {
 
   Layer createMessageText(String text, int fontSize, Integer fontColor) {
     Font font = graphics().createFont("Sans serif", Font.Style.PLAIN, fontSize);
-    if (fontColor == null)
-      fontColor = 0xFF660000;
     TextLayout layout = graphics().layoutText(
-      text, new TextFormat().withFont(font).withWrapWidth(200).withTextColor(fontColor));
-    Layer textLayer = createTextLayer(layout);
+      text, new TextFormat().withFont(font).withWrapWidth(200));
+    Layer textLayer = createTextLayer(layout, fontColor);
     return textLayer;
   }
 
-  protected Layer createTextLayer(TextLayout layout) {
+  protected Layer createTextLayer(TextLayout layout, Integer fontColor) {
     CanvasImage image = graphics().createImage((int)Math.ceil(layout.width()),
                                                (int)Math.ceil(layout.height()));
+    if (fontColor != null) image.canvas().setFillColor(fontColor);
     image.canvas().fillText(layout, 0, 0);
     return graphics().createImageLayer(image);
   }
   
   void printPayTable () {
-    String labels = "Royal Flush \n Straight Flush \n Four of a Kind \n Full House \n "+
+    String labels = " Royal Flush \n Straight Flush \n Four of a Kind \n Full House \n "+
       "Flush \n Straight \n Three of a Kind \n Two Pair \n Jacks Or Better";
     labelsLayer = createMessageText(labels, 24, null);
     labelsLayer.setTranslation(10,0);

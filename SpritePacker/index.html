@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/Sprite.js"></script>
+    <script src="js/Sheet.js"></script>    
+    <script src="js/Pack.js"></script>
+    <script src="js/jszip/jszip.js"></script>
+    <script src="js/jszip/jszip-load.js"></script>
+    <script src="js/jszip/jszip-inflate.js"></script>
+    <script src="js/jszip/jszip-deflate.js"></script>
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/Application.js"></script>
+    
+    <script src="js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+  </head>
+  <body class='well'>
+    <div class='container'>
+      <div class='navbar'>
+        <div class='navbar-inner'>
+          <a class="brand" href="#">Sprite Packer</a>
+        </div>
+      </div>
+
+    <input type="file" id="files" name="files[]" multiple >
+    <output id="list"></output>
+      <style>
+        .spriteSheet {
+          width: 512px;
+          height: 512px;
+          border: 1px;
+          border-color: black;
+          border-style: solid;
+          float: left;
+          margin: 15px;
+          overflow: auto;
+        }
+      </style>
+      <div class='spriteSheet'>
+        <canvas id='canvas' height='512' width='512' />
+      </div>
+      <form>
+        <select multiple='multiple' id='sprites'></select>
+        <button class='btn btn-primary' >Add File(s)</button>
+        <button class='btn'>Remove File(s)</button>
+        <button class='btn'>Clear All</button>
+
+        <label for='borderSize'>Border</label>
+        <input type='number' style='height:30px;' name='borderSize' value=0></input>
+
+        <label for='sheetWidth'>Width</label>
+        <select id='sheetWidth'>
+          <option value=256>256</option>
+          <option value=512>512</option>
+          <option value=1024>1024</option>
+          <option value=2048>2048</option>
+        </select>
+
+        <label for='sheetHeight'>Height</label>
+        <select id='sheetHeight'>
+          <option value=256>256</option>
+          <option value=512>512</option>
+          <option value=1024>1024</option>
+          <option value=2048>2048</option>
+        </select>
+
+      </form>
+
+
+
+    </div>
+<script>
+function handleFileSelect(evt) {
+    var files = evt.target.files; // FileList object
+
+    var packer = new Pack();
+    packer.pack(files, 512, 512, 1, "blah");
+    window.packer = packer;
+
+  
+  }
+  function handleClick(evt) {
+    $('#files').get(0).click();
+    evt.preventDefault();
+
+  }
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  document.getElementById('files').addEventListener('click', handleClick, false);
+  
+ window.application = new Application(); 
+</script>
+  <body>
+</html>

@@ -23,6 +23,10 @@ var Application = function() {
     borderDiv = document.querySelector('#borderSize');
     borderDiv.onchange = self.handleBorderChange;
 
+    removeFiles = document.querySelector('#removeFiles');
+    removeFiles.onclick = self.handleRemoveFiles;
+
+
     clearAll = document.querySelector('#clearAll');
     clearAll.onclick = self.handleClearAll;
 
@@ -125,6 +129,7 @@ var Application = function() {
   }
 
   self.handleClearAll = function(evt) {
+    evt.preventDefault();
     var spritesSelect = document.querySelector('#sprites');
     spritesSelect.innerHTML = '';
 
@@ -132,6 +137,35 @@ var Application = function() {
     self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
 
   }
+
+  self.handleRemoveFiles = function(evt) {
+    evt.preventDefault();
+    var values = [];
+    var spritesSelect = document.querySelector('#sprites');
+    for (i=0; i<spritesSelect.options.length; i++) {
+      var option = spritesSelect.options[i];
+      if (option.selected) {
+        values.push(option.value);
+      }
+    }
+    console.log(evt);
+    console.log(values);
+    var sprites = _.reject(self.packer.images, function (image) {
+      for (var i = 0; i<values.length; i++) {
+        if (values[i] === image.name)
+          return true;
+      }
+      return false;
+    });
+
+    console.log(sprites);
+    self.packer.images = sprites;
+
+    self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
+    self.packer.sheet = self.packer.packImages(self.packer.images, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler);    
+
+  }
+
 
   self.init();
 }

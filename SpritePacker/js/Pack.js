@@ -109,6 +109,28 @@ Pack.prototype = {
     zip.file("sheet.png", tempImage, {base64:true});
    
     content = zip.generate();
-    location.href = "data:application/zip;base64," + content;
+    
+    // Run this if just running the HTML file outside of an extension
+    //location.href = "data:application/zip;base64," + content;
+    //
+    // Packaged app
+    chrome.fileSystem.chooseFile({type: 'saveFile'}, function(writableFileEntry) {
+      writableFileEntry.createWriter(function(writer) {
+        writer.onerror = function(err) {console.log(err)};
+        writer.onwriteend = function(e) {
+          var notification = webkitNotifications.createNotification('', '',  'File saved.');
+          notification.show();
+        };
+        // write the bytes of the string to an ArrayBuffer
+        var raw = atob(content);
+        var ab = new ArrayBuffer(content.length);
+        var uInt8Array = new Uint8Array(raw.length);
+        for (var i = 0; i < raw.length; i++) {
+            uInt8Array[i] = raw.charCodeAt(i);
+        }
+        writer.write(new Blob([uInt8Array], {type:'application/zip'}));
+      },  function(err) {console.log(err)});
+
+    });
   }
 }

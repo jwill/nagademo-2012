@@ -169,4 +169,6 @@ var Application = function() {
 
   self.init();
 }
-
+document.addEventListener("DOMContentLoaded", function() {
+  window.application = new Application();
+});

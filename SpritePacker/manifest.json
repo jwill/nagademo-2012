@@ -1,0 +1,11 @@
+{
+  "name": "Sprite Sheet Maker",
+  "manifest_version":2,
+  "version":"0.1.1",
+  "app": {
+    "background": {
+      "scripts": ["js/background.js"]
+    }
+  }, 
+  "permissions": ["experimental","appWindow", "fileSystem", "fileSystemWrite", "notifications"]
+}

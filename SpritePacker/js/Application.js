@@ -3,6 +3,8 @@ var Application = function() {
   
   self.canvasWidth = 256;
   self.canvasHeight = 256;
+  self.border = 0;
+  self.packer = new Pack();
   
   
  
@@ -11,8 +13,14 @@ var Application = function() {
     self.canvas = document.querySelector('#canvas');
     sheetWidthDiv = document.querySelector('#sheetWidth');
     sheetWidthDiv.onchange = self.changeCanvasWidth;
+
     sheetHeightDiv = document.querySelector('#sheetHeight');
     sheetHeightDiv.onchange = self.changeCanvasHeight;
+    
+    dropZone = document.querySelector('.spriteSheet');
+    dropZone.ondrop = self.handleDrop;
+    
+    
     self.initCanvas();
   }
 
@@ -40,7 +48,7 @@ var Application = function() {
 
   self.initCanvas = function() {
     var pattern = document.createElement('canvas');
-    :pattern.width = pattern.height = 40;
+    pattern.width = pattern.height = 40;
     
     var pctx = pattern.getContext('2d');
     pctx.fillStyle = 'rgb(177,177,177)';
@@ -51,6 +59,22 @@ var Application = function() {
     var tempPattern = ctx.createPattern(pattern, 'repeat');
     ctx.fillStyle = tempPattern;
     ctx.fillRect(0,0, self.canvasWidth, self.canvasHeight);
+  }
+
+  self.handleDrop = function(evt) {
+    evt.preventDefault();
+
+    console.log('dropped');
+    
+    console.log(evt.dataTransfer.files);
+    var handler = function() {
+       var ctx = self.canvas.getContext('2d');
+      ctx.drawImage(self.packer.canvas, 0, 0);
+
+    }
+    self.packer.pack(evt.dataTransfer.files, self.canvasWidth, self.canvasHeight, self.border, handler);
+    
+       
   }
 
 

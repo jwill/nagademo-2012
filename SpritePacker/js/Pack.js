@@ -3,7 +3,9 @@
  *
  * @author jwill
  */
-var Pack = function() { }
+var Pack = function() {
+  this.images = [];
+}
 
 Pack.prototype = {
   /**
@@ -15,9 +17,7 @@ Pack.prototype = {
    * @param border The The size of the border between sprites
    * @param outFile The generated sprite sheet
    */ 
-  pack: function(files, width, height, border) {
-    var images = [];
-    
+  pack: function(files, width, height, border, handler) {
     for (var i = 0; i<files.length; i++) {
       var f = files[i];
       // Only process image files
@@ -36,11 +36,11 @@ Pack.prototype = {
           image.onload = function() {
             
             var sprite = new Sprite(theFile.name, this);
-            images.push(sprite);
-            console.log(images.length);
-            if (files.length == images.length) {
+            self.images.push(sprite);
+            console.log(self.images.length);
+            if (files.length == self.images.length) {
               console.log("here");
-              self.sheet = self.packImages(images, width, height, border)
+              self.sheet = self.packImages(self.images, width, height, border, handler)
 
             }
           };
@@ -61,18 +61,19 @@ Pack.prototype = {
    * @param border The The size of the border between sprites
    * @param outFile The generated sprite sheet
    */ 
-  packImages: function(images, width, height, border) {
+  packImages: function(images, width, height, border, handler) {
+    var self = this;
     var result;
     var sortedImages = _.sortBy(images,'height');
     var x = 0, y = 0, rowHeight = 0;
 
     var sheetData = [];
 
-    var canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
+    self.canvas = document.createElement("canvas");
+    self.canvas.width = width;
+    self.canvas.height = height;
     
-    var ctx = canvas.getContext("2d");
+    var ctx = self.canvas.getContext("2d");
 
     for (var i = 0; i<images.length; i++) {
       var currentSprite = images[i];
@@ -97,9 +98,10 @@ Pack.prototype = {
       ctx.drawImage(currentSprite.getImage(), x, y);
       x += currentSprite.width + border;
       sheetData.push(data);
+      handler();
 
     }
-    return new Sheet(canvas.toDataURL(), images, sheetData);
+    return new Sheet(self.canvas.toDataURL(), images, sheetData);
 
   },
   zipFile: function() {

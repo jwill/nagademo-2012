@@ -23,8 +23,8 @@
         </div>
       </div>
 
-    <input type="file" id="files" name="files[]" multiple >
-    <output id="list"></output>
+    <!--input type="file" id="files" name="files[]" multiple >
+    <output id="list"></output-->
       <style>
         .spriteSheet {
           width: 512px;
@@ -41,11 +41,12 @@
         <canvas id='canvas' height='512' width='512' />
       </div>
       <form>
+        <label for='sprites'>Sprites</label>
         <select multiple='multiple' id='sprites'></select>
-        <button class='btn btn-primary' >Add File(s)</button>
+        <br/>
         <button class='btn'>Remove File(s)</button>
         <button class='btn'>Clear All</button>
-
+        <br/><br/>
         <label for='borderSize'>Border</label>
         <input type='number' style='height:30px;' name='borderSize' value=0></input>
 
@@ -64,7 +65,8 @@
           <option value=1024>1024</option>
           <option value=2048>2048</option>
         </select>
-
+        <br/>
+        <button id='exportZip' class='btn btn-primary'>Export Zip (PNG & DEF file)</button>
       </form>
 
 
@@ -86,8 +88,6 @@ function handleFileSelect(evt) {
 
   }
 
-  document.getElementById('files').addEventListener('change', handleFileSelect, false);
-  document.getElementById('files').addEventListener('click', handleClick, false);
   
  window.application = new Application(); 
 </script>

@@ -23,6 +23,9 @@ var Application = function() {
     borderDiv = document.querySelector('#borderSize');
     borderDiv.onchange = self.handleBorderChange;
 
+    clearAll = document.querySelector('#clearAll');
+    clearAll.onclick = self.handleClearAll;
+
 
     dropZone = document.querySelector('.spriteSheet');
     dropZone.ondrop = self.handleDrop;
@@ -119,6 +122,15 @@ var Application = function() {
     self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
     self.packer.sheet = self.packer.packImages(self.packer.images, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler)
     
+  }
+
+  self.handleClearAll = function(evt) {
+    var spritesSelect = document.querySelector('#sprites');
+    spritesSelect.innerHTML = '';
+
+    self.packer = new Pack();
+    self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
+
   }
 
   self.init();

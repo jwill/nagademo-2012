@@ -37,12 +37,7 @@ Pack.prototype = {
             
             var sprite = new Sprite(theFile.name, this);
             self.images.push(sprite);
-            console.log(self.images.length);
-            if (files.length == self.images.length) {
-              console.log("here");
-              self.sheet = self.packImages(self.images, width, height, border, handler)
-
-            }
+            self.sheet = self.packImages(self.images, width, height, border, handler)
           };
 
         }

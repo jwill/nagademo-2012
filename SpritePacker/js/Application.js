@@ -16,7 +16,14 @@ var Application = function() {
 
     sheetHeightDiv = document.querySelector('#sheetHeight');
     sheetHeightDiv.onchange = self.changeCanvasHeight;
+
+    exportZip = document.querySelector('#exportZip');
+    exportZip.onclick = self.handleZip;
     
+    borderDiv = document.querySelector('#borderSize');
+    borderDiv.onchange = self.handleBorderChange;
+
+
     dropZone = document.querySelector('.spriteSheet');
     dropZone.ondrop = self.handleDrop;
     
@@ -47,6 +54,7 @@ var Application = function() {
   }
 
   self.initCanvas = function() {
+
     var pattern = document.createElement('canvas');
     pattern.width = pattern.height = 40;
     
@@ -64,19 +72,37 @@ var Application = function() {
   self.handleDrop = function(evt) {
     evt.preventDefault();
 
-    console.log('dropped');
-    
+
     console.log(evt.dataTransfer.files);
     var handler = function() {
        var ctx = self.canvas.getContext('2d');
       ctx.drawImage(self.packer.canvas, 0, 0);
 
     }
-    self.packer.pack(evt.dataTransfer.files, self.canvasWidth, self.canvasHeight, self.border, handler);
+    self.packer.pack(evt.dataTransfer.files, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler);
     
        
   }
+  self.postDrawHandler = function() {
+       var ctx = self.canvas.getContext('2d');
+      ctx.drawImage(self.packer.canvas, 0, 0);
 
+    }
+
+
+  self.handleZip = function(evt) {
+    evt.preventDefault();
+
+    self.packer.zipFile();
+  }
+  self.handleBorderChange = function(evt) {
+    evt.preventDefault();
+    self.border = Number(evt.target.value);
+    console.log(self.border);
+    self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
+    self.packer.sheet = self.packer.packImages(self.packer.images, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler)
+    
+  }
 
   self.init();
 }

@@ -45,12 +45,17 @@ var Application = function() {
     self.canvasWidth = evt.target.value;
 
     self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
+    self.packer.sheet = self.packer.packImages(self.packer.images, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler)
+    
   }
 
   self.changeCanvasHeight = function(evt) {
     self.canvasHeight = evt.target.value;
 
     self.setCanvasDimensions(self.canvasWidth, self.canvasHeight);
+    self.packer.sheet = self.packer.packImages(self.packer.images, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler)
+    
+
   }
 
   self.initCanvas = function() {
@@ -81,11 +86,23 @@ var Application = function() {
     }
     self.packer.pack(evt.dataTransfer.files, self.canvasWidth, self.canvasHeight, self.border, self.postDrawHandler);
     
-       
+   
   }
   self.postDrawHandler = function() {
        var ctx = self.canvas.getContext('2d');
       ctx.drawImage(self.packer.canvas, 0, 0);
+
+      // Clear select box
+      
+       var spritesSelect = document.querySelector('#sprites');
+    spritesSelect.innerHTML = '';
+    for (var i = 0; i< self.packer.images.length; i++) {
+      var image = self.packer.images[i];
+      var option = document.createElement('option');
+      option.value = image.name
+      option.innerText = image.name;
+      spritesSelect.appendChild(option);
+    }
 
     }
 

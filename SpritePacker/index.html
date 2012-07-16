@@ -14,6 +14,8 @@
     <script src="js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/application.css"/>
+
   </head>
   <body class='well'>
     <div class='container'>
@@ -23,20 +25,6 @@
         </div>
       </div>
 
-    <!--input type="file" id="files" name="files[]" multiple >
-    <output id="list"></output-->
-      <style>
-        .spriteSheet {
-          width: 512px;
-          height: 512px;
-          border: 1px;
-          border-color: black;
-          border-style: solid;
-          float: left;
-          margin: 15px;
-          overflow: auto;
-        }
-      </style>
       <div class='spriteSheet'>
         <canvas id='canvas' height='512' width='512' />
       </div>
@@ -73,22 +61,6 @@
 
     </div>
 <script>
-function handleFileSelect(evt) {
-    var files = evt.target.files; // FileList object
-
-    var packer = new Pack();
-    packer.pack(files, 512, 512, 1, "blah");
-    window.packer = packer;
-
-  
-  }
-  function handleClick(evt) {
-    $('#files').get(0).click();
-    evt.preventDefault();
-
-  }
-
-  
  window.application = new Application(); 
 </script>
   <body>

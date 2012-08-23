@@ -7,5 +7,5 @@
       "scripts": ["js/background.js"]
     }
   }, 
-  "permissions": ["experimental","appWindow", "fileSystem", "fileSystemWrite", "notifications"]
+  "permissions": ["experimental","app.window", "fileSystem", "fileSystemWrite", "notifications"]
 }

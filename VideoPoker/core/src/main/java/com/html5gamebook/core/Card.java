@@ -7,7 +7,7 @@ import static playn.core.PlayN.*;
 public class Card {
   static Image masterCardBack;
   String suit, ordinal;
-  final Image cardFront, cardBack;
+  String cardFront;
   ImageLayer frontLayer, backLayer;
   int value;
   boolean frontShown = false;
@@ -22,7 +22,7 @@ public class Card {
 
     // load card back if not loaded
     if (Card.masterCardBack == null) {
-      Card.masterCardBack = assets().getImage("images/back.png");
+      /*Card.masterCardBack = assets().getImage("images/back.png");
       Card.masterCardBack.addCallback(new ResourceCallback<Image>() {
         @Override
         public void done(Image image) {
@@ -35,14 +35,19 @@ public class Card {
         }
       
       });
+      */
+      Card.masterCardBack = Deck.sheet.get("back.png");
     }
     
-    this.cardBack = Card.masterCardBack;
+    //this.cardBack = Card.masterCardBack;
     
 
     // load front of card
-    String filename = "images/"+this.ordinal+"_"+this.suit+".png";
-    cardFront = assets().getImage(filename);
+    //String filename = "images/"+this.ordinal+"_"+this.suit+".png";
+    String filename = this.ordinal+"_"+this.suit+".png"; 
+    //cardFront = assets().getImage(filename);
+    //Image image = Deck.sheet.get(filename);
+    cardFront = filename;
   }
 
   String getOrdinal() {
@@ -80,7 +85,7 @@ public class Card {
 
   ImageLayer getFrontLayer() {
     if (frontLayer == null) {
-      frontLayer = graphics().createImageLayer(cardFront);
+      frontLayer = graphics().createImageLayer(Deck.sheet.get(cardFront));
       frontLayer.setInteractive(true);
       frontLayer.addListener(new Pointer.Adapter() {
         @Override
@@ -95,7 +100,7 @@ public class Card {
 
   ImageLayer getBackLayer() {
     if (backLayer == null)
-      backLayer = graphics().createImageLayer(cardBack);
+      backLayer = graphics().createImageLayer(Card.masterCardBack);
     return backLayer;
   }
 

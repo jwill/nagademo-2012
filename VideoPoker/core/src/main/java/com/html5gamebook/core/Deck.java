@@ -5,10 +5,12 @@ public class Deck {
   private ArrayList cards;
   private int numDecks;
   private int [] vals;
+  static CardSpriteSheet sheet;
 
   public Deck(int numDecks) {
     cards = new ArrayList<Card>();
     this.numDecks = numDecks;
+    sheet = new CardSpriteSheet("images/sheet.png");
     initCards(null);
   }
 

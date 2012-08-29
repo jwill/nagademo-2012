@@ -47,6 +47,25 @@
         </executions>
       </plugin>
 
+      <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>jarjar-maven-plugin</artifactId>
+          <version>1.5</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>jarjar</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  
+                </rules>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
       <!-- allows testing of Java backend via: mvn test -->
       <plugin>
         <artifactId>maven-antrun-plugin</artifactId>
@@ -68,6 +87,17 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>com.html5gamebook.java.VideoPokerJava</mainClass>
+						</manifest>
+					</archive>
+				</configuration>
+			</plugin>
     </plugins>
 
     <!-- This configuration is used to store Eclipse m2e settings only. -->

@@ -22,20 +22,6 @@ public class Card {
 
     // load card back if not loaded
     if (Card.masterCardBack == null) {
-      /*Card.masterCardBack = assets().getImage("images/back.png");
-      Card.masterCardBack.addCallback(new ResourceCallback<Image>() {
-        @Override
-        public void done(Image image) {
-          log().debug("loaded");
-          
-        }
-
-        @Override
-        public void error(Throwable throwable) {
-        }
-      
-      });
-      */
       Card.masterCardBack = Deck.sheet.get("back.png");
     }
     

@@ -1,0 +1,10 @@
+<module rename-to='Shootorial'>
+  <inherits name='playn.PlayN'/>
+
+  <source path='core'/>
+  <source path='html'/>
+
+  <public path="resources" />
+
+  <entry-point class='com.html5gamebook.html.ShootorialHtml'/>
+</module>

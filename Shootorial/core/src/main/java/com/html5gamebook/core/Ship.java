@@ -76,11 +76,17 @@ public class Ship {
   }
 
   public void moveX(int x) {
-    this.layer.transform().translateX(x);
+    float nextX = this.layer.transform().tx() + x;
+    if ((-10 < nextX) && (nextX < graphics().width() - 10)) {
+      this.layer.transform().translateX(x);   
+    }
   }
 
   public void moveY(int y) {
-    this.layer.transform().translateY(y);   
+    float nextY = this.layer.transform().ty() + y;
+    if ((-10 < nextY) && (nextY < graphics().height() - 10)) {
+      this.layer.transform().translateY(y);   
+    }
   }
 
 }

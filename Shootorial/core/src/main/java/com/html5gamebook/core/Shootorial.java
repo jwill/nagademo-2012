@@ -11,6 +11,7 @@ import playn.core.ImageLayer;
 public class Shootorial implements Game, Keyboard.Listener {
   Ship ship;
   int velocity = 10;
+  boolean isMoving = false;
 
   @Override
   public void init() {
@@ -43,16 +44,10 @@ public class Shootorial implements Game, Keyboard.Listener {
   public void onKeyDown(Keyboard.Event event) {
     switch(event.key()) {
       case UP:
-        ship.moveY(-velocity);
-        break;
       case DOWN:
-        ship.moveY(velocity);
-        break;
-      case RIGHT:
-        ship.moveX(velocity);
-        break;
       case LEFT:
-        ship.moveX(-velocity);
+      case RIGHT:
+        ship.setDirection(event.key());
         break;
     }
   }
@@ -65,6 +60,12 @@ public class Shootorial implements Game, Keyboard.Listener {
   @Override
   public void onKeyUp(Keyboard.Event event) {
       // Does nothing.
+      switch(event.key()) {
+        case UP:case DOWN: case RIGHT: case LEFT:
+        ship.setDirection(null);
+        break;
+      }
+
   }
 
 }

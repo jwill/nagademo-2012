@@ -2,6 +2,9 @@ package com.html5gamebook.core;
 
 import static playn.core.PlayN.*;
 
+import playn.core.Key;
+import static playn.core.Key.*;
+
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
@@ -13,6 +16,9 @@ public class Ship {
    private ImageLayer layer;
 
    private float x, y;
+   private int velocity = 10;   
+   private boolean isMoving = false;
+   private Key direction = null;
 
    public Ship(final GroupLayer parentLayer, final float x, final float y) {
      Image image = assets().getImage(IMAGE);
@@ -34,8 +40,35 @@ public class Ship {
      });
    }
 
+   public boolean isMoving() { return isMoving;}
+   public void isMoving(boolean state) { isMoving = state; }
+   public Key getDirection() { return direction; }
+   public void setDirection(Key direction) { 
+     if (direction != null) 
+       isMoving(true);
+     else isMoving(false);
+     this.direction = direction; 
+   
+   }
+
+
   public void update(float delta) {
-      
+      if (isMoving) {
+        switch(direction) {
+          case UP:
+            moveY(-velocity);
+            break;
+          case DOWN:
+            moveY(velocity);
+            break;
+          case RIGHT:
+            moveX(velocity);
+            break;
+          case LEFT:
+            moveX(-velocity);
+            break;
+        }
+      }
   }
 
   public Transform getTransform() {
@@ -43,7 +76,6 @@ public class Ship {
   }
 
   public void moveX(int x) {
-    log().debug("Move "+x);
     this.layer.transform().translateX(x);
   }
 

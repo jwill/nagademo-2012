@@ -15,7 +15,6 @@ public class Ship {
    public static String IMAGE = "images/ship.png";
    private ImageLayer layer;
 
-   private float x, y;
    private int velocity = 10;   
    private boolean isMoving = false;
    private Key direction = null;

@@ -6,6 +6,8 @@ import playn.core.Key;
 import playn.core.Game;
 import playn.core.Image;
 import playn.core.Surface;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
 import playn.core.Keyboard;
 import playn.core.ImageLayer;
 import playn.core.ImmediateLayer;
@@ -13,7 +15,9 @@ import playn.core.ImmediateLayer;
 
 public class Shootorial implements Game, Keyboard.Listener {
   Ship ship;
+  int shotMax = 8;
   float position = 0, percentDone =0, duration = 15000;
+  CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<Bullet>();
 
   @Override
   public void init() {
@@ -62,7 +66,15 @@ public class Shootorial implements Game, Keyboard.Listener {
     }
 
     ship.update(delta);
-    
+    Iterator<Bullet> iter = bullets.iterator();
+    while(iter.hasNext()) {
+      Bullet bullet = (Bullet)iter.next();
+      if (bullet.destroyed()) {
+        bullets.remove(bullet);
+      }
+      bullet.update(delta);
+
+    }
 
   }
 
@@ -76,6 +88,12 @@ public class Shootorial implements Game, Keyboard.Listener {
     switch(event.key()) {
       case UP: case DOWN: case LEFT: case RIGHT:
         ship.setDirection(event.key());
+        break;
+      case SPACE:
+        if (bullets.size() < shotMax) {
+          Bullet b = new Bullet(graphics().rootLayer(), ship.getTransform().tx() + 75, ship.getTransform().ty() + 3);
+          bullets.add(b);
+        }
         break;
     }
   }

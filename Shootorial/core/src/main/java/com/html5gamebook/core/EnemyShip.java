@@ -9,12 +9,15 @@ import playn.core.ResourceCallback;
 
 import pythagoras.f.Transform;
 
-public class Bullet {
-  float velocity = 20;
-  public static String IMAGE = "images/bullet.png";  
+public class EnemyShip {
+  float velocity;
+  public static String IMAGE = "images/enemyShip.png";  
   private ImageLayer layer = null;
 
-  public Bullet(final float x, final float y) {
+  public EnemyShip() {
+     final float x = 700;
+     final float y = (float)Math.random() * 300;
+     velocity = (float)Math.random() * 5 + 5;
      Image image = assets().getImage(IMAGE);
      layer = graphics().createImageLayer(image);
 
@@ -24,7 +27,6 @@ public class Bullet {
          public void done(Image image) {
             // layer.setOrigin(0, image.height() / 2f);
              layer.setTranslation(x,y);
-             layer.setScale(0.5f);
              graphics().rootLayer().add(layer);
          }
 
@@ -45,9 +47,10 @@ public class Bullet {
   }
 
   public void update(float delta) {
-    getTransform().translateX(velocity);
-    if (graphics().width() < getTransform().tx()) {
+    getTransform().translateX(-velocity);
+    if (-50 > getTransform().tx()) {
       layer.destroy();
     }
   }
 }
+

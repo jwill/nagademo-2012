@@ -18,6 +18,7 @@ public class Shootorial implements Game, Keyboard.Listener {
   int shotMax = 8;
   float position = 0, percentDone =0, duration = 15000;
   CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<Bullet>();
+  CopyOnWriteArrayList<EnemyShip> enemies = new CopyOnWriteArrayList<EnemyShip>();
   EnemyShipManager enemyManager = new EnemyShipManager();
 
   @Override

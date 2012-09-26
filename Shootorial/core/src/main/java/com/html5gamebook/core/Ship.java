@@ -10,9 +10,16 @@ import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.ResourceCallback;
 import pythagoras.f.Transform;
+import pythagoras.f.Point;
+import java.util.Iterator;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+
 
 public class Ship {
    public static String IMAGE = "images/ship.png";
+   int shotMax = 8;   
+   CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<Bullet>();
    private ImageLayer layer;
 
    private int velocity = 10;   
@@ -50,6 +57,18 @@ public class Ship {
    
    }
 
+   public ImageLayer getLayer() {
+     return layer;
+   }
+
+    public void shoot() {
+      if(bullets.size() < shotMax) {
+        Bullet b = new Bullet(getTransform().tx() + 75, getTransform().ty() + 3, true);
+        bullets.add(b);
+
+      }
+    }
+
 
   public void update(float delta) {
       if (isMoving) {
@@ -68,6 +87,17 @@ public class Ship {
             break;
         }
       }
+
+      Iterator<Bullet> iter = bullets.iterator();
+      while(iter.hasNext()) {
+        Bullet bullet = (Bullet)iter.next();
+        if (bullet.destroyed()) {
+          bullets.remove(bullet);
+        }
+        bullet.update(delta);
+
+      }
+
   }
 
   public Transform getTransform() {
@@ -77,7 +107,7 @@ public class Ship {
   public void moveX(int x) {
     float nextX = this.layer.transform().tx() + x;
     if ((-10 < nextX) && (nextX < graphics().width() - 10)) {
-      this.layer.transform().translateX(x);   
+      this.layer.transform().translateX(x);
     }
   }
 
@@ -87,5 +117,39 @@ public class Ship {
       this.layer.transform().translateY(y);   
     }
   }
+
+  public boolean checkCollision(EnemyShip enemy) {
+    Transform t = getTransform();
+    Point point = enemy.getPosition();
+    if (point == null) return false;
+    // tweak to catch edge case
+    if ((t.ty()-20 <= point.y()) && ((t.ty() + layer.height()) >= point.y())) {
+      if ( (t.tx() <= point.x()) && ((t.tx()+layer.width() ) >= point.x()) ) {
+        log().debug("collided "+point);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public CopyOnWriteArrayList<Bullet> getBullets() {
+    return bullets;
+  }
+
+  public boolean checkBulletCollision(Bullet bullet, EnemyShip enemy) {
+    Transform t = enemy.getTransform();
+    Transform b = bullet.getTransform();
+    Point point = enemy.getPosition();
+    // tweak to catch edge case
+    if ((t.ty()-10 <= b.ty()) && ((t.ty() + enemy.getLayer().height()) >= b.ty())) {
+      if ( (t.tx() <= b.tx()) && ((t.tx()+enemy.getLayer().width() ) >= b.tx()) ) {
+        bullet.destroy();
+        bullets.remove(bullet);
+        return true;
+      }
+    }
+    return false;
+  }
+
 
 }

@@ -11,11 +11,17 @@ import pythagoras.f.Transform;
 
 public class Bullet {
   float velocity = 20;
-  public static String IMAGE = "images/bullet.png";  
+  public static String IMAGE = "images/bullet.png";
+  public static String ALTERNATE_IMAGE = "images/enemy-bullet.png";  
   private ImageLayer layer = null;
+  boolean isHero = false;
 
-  public Bullet(final float x, final float y) {
-     Image image = assets().getImage(IMAGE);
+  public Bullet(final float x, final float y, boolean isHero) {
+     Image image;
+     this.isHero = isHero;
+     if (isHero)
+      image = assets().getImage(IMAGE);
+     else image = assets().getImage(ALTERNATE_IMAGE);
      layer = graphics().createImageLayer(image);
 
      // Callback for image load
@@ -40,13 +46,19 @@ public class Bullet {
     return layer.transform();
   }
 
+  public void destroy() {
+    layer.destroy();
+  }
+
   public boolean destroyed() {
     return layer.destroyed();
   }
 
   public void update(float delta) {
-    getTransform().translateX(velocity);
-    if (graphics().width() < getTransform().tx()) {
+    if (isHero)
+      getTransform().translateX(velocity);
+    else getTransform().translateX(-velocity);
+    if ((graphics().width() < getTransform().tx()) || (0 > getTransform().tx())) {
       layer.destroy();
     }
   }

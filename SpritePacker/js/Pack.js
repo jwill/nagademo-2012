@@ -114,7 +114,7 @@ Pack.prototype = {
     //location.href = "data:application/zip;base64," + content;
     //
     // Packaged app
-    chrome.fileSystem.chooseFile({type: 'saveFile'}, function(writableFileEntry) {
+    chrome.fileSystem.chooseEntry({type: 'saveFile'}, function(writableFileEntry) {
       writableFileEntry.createWriter(function(writer) {
         writer.onerror = function(err) {console.log(err)};
         writer.onwriteend = function(e) {

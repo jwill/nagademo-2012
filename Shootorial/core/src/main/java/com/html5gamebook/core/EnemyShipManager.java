@@ -7,21 +7,22 @@ import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.f.Rectangle;
 
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 public class EnemyShipManager {
   private int spawnTime, currentTime;
   private boolean spawning;
   private Ship heroShip;
   private Explosion explosion;
-  private CopyOnWriteArrayList<EnemyShip> enemies;
+  private ArrayList<EnemyShip> enemies;
 
   public EnemyShipManager() {
-    enemies = new CopyOnWriteArrayList<EnemyShip>();
+    enemies = new ArrayList<EnemyShip>();
     spawnTime = 1500;
     currentTime = 0;
     spawning = true;
     explosion = new Explosion();
+    
     spawn();
   }
 
@@ -55,34 +56,38 @@ public class EnemyShipManager {
       spawn();
     }
 
-    CopyOnWriteArrayList bullets = heroShip.getBullets();    
+    ArrayList bullets = heroShip.getBullets();    
     Iterator<EnemyShip> iter = enemies.iterator();
     Iterator<Bullet> bulletIter = bullets.iterator();    
-    while(iter.hasNext()) {
-      EnemyShip enemy = (EnemyShip)iter.next();
+    for (Object obj : enemies.toArray()) {
+    //while(iter.hasNext()) {
+      EnemyShip enemy = (EnemyShip)obj;
       if (heroShip.checkCollision(enemy)) {
         enemy.isMoving(false);
         enemy.getLayer().setVisible(false);
-        enemies.remove(enemy);
+        if (enemy.getBullets().size() == 0)
+          enemies.remove(enemy);
         Point p = enemy.getPosition();
         explosion.spawnExplosion(p.x(),p.y());
-        
       }
-      while(bulletIter.hasNext()) {
-        Bullet bullet = (Bullet)bulletIter.next();
+      for (Object obj2 : bullets.toArray()) {
+      //while(bulletIter.hasNext()) {
+        Bullet bullet = (Bullet)obj2;
         if (heroShip.checkBulletCollision(bullet, enemy)) {
           enemy.isMoving(false);
           enemy.getLayer().setVisible(false);
-          enemies.remove(enemy);
+          if (enemy.getBullets().size() == 0)
+            enemies.remove(enemy);
           Point p = enemy.getPosition();
           explosion.spawnExplosion(p.x(),p.y());
         }
       }
       // Enemy's bullets
-      CopyOnWriteArrayList enemyBullets = enemy.getBullets();
+      ArrayList enemyBullets = enemy.getBullets();
       Iterator<Bullet> enemyBulletIter = enemyBullets.iterator();
-      while(enemyBulletIter.hasNext()) {
-        Bullet bullet = (Bullet)enemyBulletIter.next();
+      for (Object obj3 : enemyBullets.toArray()) {
+      //while(enemyBulletIter.hasNext()) {
+        Bullet bullet = (Bullet)obj3;
         if (enemy.checkBulletCollision(bullet, heroShip)) {
           bullet.destroy();
           enemyBullets.remove(bullet);
@@ -102,5 +107,4 @@ public class EnemyShipManager {
     
   }
 
-
-}
+  }

@@ -77,7 +77,7 @@ public class Explosion {
         percentDone = (position) / duration;
              }
     });
-     layer.setDepth(1000);
+     //layer.setDepth(1000);
      graphics().rootLayer().add(layer);
     }
 

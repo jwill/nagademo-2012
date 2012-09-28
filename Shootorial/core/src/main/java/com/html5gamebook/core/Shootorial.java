@@ -19,7 +19,7 @@ public class Shootorial implements Game, Keyboard.Listener {
 
   @Override
   public void init() {
-    graphics().setSize(640,300);
+    graphics().setSize(840,300);
     // create and add background image layer
     final Image bgImage = assets().getImage("images/scrollingBackground.jpeg");
        
@@ -34,10 +34,10 @@ public class Shootorial implements Game, Keyboard.Listener {
         float pixelsLeft = image.width() - startX;
 
         // Signature is flipped from Canvas
-        surf.drawImage(image, 0, 0, pixelsLeft, image.height(), startX, 0, pixelsLeft, image.height());
+        surf.drawImage(image, 0, 0, pixelsLeft, graphics().height(), startX, 0, pixelsLeft, image.height());
         if (pixelsLeft < graphics().width()) {
           float pixelsToDraw = image.width() - pixelsLeft;
-          surf.drawImage(image, pixelsLeft-1, 0, pixelsToDraw, image.height(), 0, 0, pixelsToDraw, image.height());
+          surf.drawImage(image, pixelsLeft-1, 0, pixelsToDraw, graphics().height(), 0, 0, pixelsToDraw, image.height());
         }
       }
     }));

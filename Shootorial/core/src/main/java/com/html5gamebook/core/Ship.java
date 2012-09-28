@@ -12,14 +12,14 @@ import playn.core.ResourceCallback;
 import pythagoras.f.Transform;
 import pythagoras.f.Point;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 
 
 public class Ship {
    public static String IMAGE = "images/ship.png";
    int shotMax = 8;   
-   CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<Bullet>();
+   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
    private ImageLayer layer;
 
    private int velocity = 10;   
@@ -122,6 +122,7 @@ public class Ship {
     Transform t = getTransform();
     Point point = enemy.getPosition();
     if (point == null) return false;
+    if (enemy.getLayer().visible() == false) return false;
     // tweak to catch edge case
     if ((t.ty()-20 <= point.y()) && ((t.ty() + layer.height()) >= point.y())) {
       if ( (t.tx() <= point.x()) && ((t.tx()+layer.width() ) >= point.x()) ) {
@@ -132,7 +133,7 @@ public class Ship {
     return false;
   }
 
-  public CopyOnWriteArrayList<Bullet> getBullets() {
+  public ArrayList<Bullet> getBullets() {
     return bullets;
   }
 

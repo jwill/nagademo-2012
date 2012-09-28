@@ -7,7 +7,7 @@ import playn.core.ImageLayer;
 import playn.core.GroupLayer;
 import playn.core.ResourceCallback;
 import java.util.Iterator;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
 
 
 import pythagoras.f.Transform;
@@ -20,12 +20,12 @@ public class EnemyShip {
   private ImageLayer layer = null;
   int shootInterval;
   int currentTime = 0;
-  CopyOnWriteArrayList<Bullet> bullets = new CopyOnWriteArrayList<Bullet>();
+  ArrayList<Bullet> bullets = new ArrayList<Bullet>();
   
 
 
   public EnemyShip() {
-     final float x = 700;
+     final float x = graphics().width()+200;
      final float y = (float)Math.random() * 300;
      shootInterval = (int)Math.random()*500 + 1000;
      velocity = (float)Math.random() * 5 + 5;
@@ -80,8 +80,9 @@ public class EnemyShip {
     }
 
     Iterator<Bullet> iter = bullets.iterator();
-    while(iter.hasNext()) {
-      Bullet bullet = (Bullet)iter.next();
+    for (Object b : bullets.toArray()) {
+    //while(iter.hasNext()) {
+      Bullet bullet = (Bullet)b;
       if (bullet.destroyed()) {
         bullets.remove(bullet);
       }
@@ -91,7 +92,7 @@ public class EnemyShip {
 
 
     currentTime += delta;
-    if (currentTime >= shootInterval) {
+    if (currentTime >= shootInterval && getLayer().visible()) {
       //Spawn new enemy
       shoot();
       currentTime = 0;
@@ -99,7 +100,7 @@ public class EnemyShip {
 
   }
 
-   public CopyOnWriteArrayList<Bullet> getBullets() {
+   public ArrayList<Bullet> getBullets() {
     return bullets;
   }
 

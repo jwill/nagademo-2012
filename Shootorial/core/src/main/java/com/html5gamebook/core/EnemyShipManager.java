@@ -6,6 +6,7 @@ import static playn.core.PlayN.*;
 import playn.core.Layer;
 import pythagoras.f.Point;
 import pythagoras.f.Rectangle;
+import playn.core.AssetWatcher;
 
 import java.util.ArrayList;
 
@@ -15,15 +16,31 @@ public class EnemyShipManager {
   private Ship heroShip;
   private Explosion explosion;
   private ArrayList<EnemyShip> enemies;
+  private AssetWatcher assetWatcher;
 
   public EnemyShipManager() {
     enemies = new ArrayList<EnemyShip>();
     spawnTime = 1500;
     currentTime = 0;
-    spawning = true;
+    spawning = false;
     explosion = new Explosion();
+    assetWatcher = new AssetWatcher(new AssetWatcher.Listener(){
+      @Override
+      public void done() {
+        log().debug("spawning.");
+        spawning = true;
+        spawn();
+      }
+      @Override
+      public void error(Throwable e) {
+        log().debug(e.toString());
+      }
+    });
     
-    spawn();
+    assetWatcher.add(assets().getImage("images/enemyShip.png"));
+    assetWatcher.add(assets().getImage("images/explosion_2.png"));
+    assetWatcher.add(assets().getImage("images/enemy-bullet.png"));
+    assetWatcher.start();
   }
 
   public void setSpawnTime(int time) {
@@ -51,7 +68,7 @@ public class EnemyShipManager {
 
   public void update(float delta) {
     currentTime += delta;
-    if (currentTime >= spawnTime) {
+    if (currentTime >= spawnTime && spawning) {
       //Spawn new enemy
       spawn();
     }

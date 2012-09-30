@@ -6,6 +6,7 @@ import playn.core.Key;
 import playn.core.Game;
 import playn.core.Image;
 import playn.core.Surface;
+import playn.core.SurfaceLayer;
 import java.util.Iterator;
 import playn.core.Keyboard;
 import playn.core.ImageLayer;
@@ -16,14 +17,20 @@ public class Shootorial implements Game, Keyboard.Listener {
   Ship ship;
   float position = 0, percentDone =0, duration = 15000;
   EnemyShipManager enemyManager = new EnemyShipManager();
+  private SurfaceLayer layer;
+ // Image bgImage;
 
   @Override
   public void init() {
-    graphics().setSize(840,300);
-    // create and add background image layer
     final Image bgImage = assets().getImage("images/scrollingBackground.jpeg");
+    
+    graphics().setSize(640,300);
+    // create and add background image layer
        
     keyboard().setListener(this);
+
+  //  layer = graphics().createSurfaceLayer(graphics().width(), graphics().height());
+  //  graphics().rootLayer().add(layer);
 
     graphics().rootLayer().add(graphics().createImmediateLayer(new ImmediateLayer.Renderer(){
       public void render(Surface surf) {
@@ -42,14 +49,29 @@ public class Shootorial implements Game, Keyboard.Listener {
       }
     }));
 
+   // graphics().rootLayer().add(layer);
     ship = new Ship();
    
     enemyManager.setHeroShip(ship);
   }
 
+   public void drawLayer(Surface surf, Image image) {
+        float startX = percentDone * image.width();
+        float pixelsLeft = image.width() - startX;
+
+        // Signature is flipped from Canvas
+        surf.drawImage(image, 0, 0, pixelsLeft, graphics().height(), startX, 0, pixelsLeft, image.height());
+        if (pixelsLeft < graphics().width()) {
+          float pixelsToDraw = image.width() - pixelsLeft;
+          surf.drawImage(image, pixelsLeft-1, 0, pixelsToDraw, graphics().height(), 0, 0, pixelsToDraw, image.height());
+        }
+      }
+
+
   @Override
   public void paint(float alpha) {
     // the background automatically paints itself, so no need to do anything here!
+    //drawLayer(layer.surface(),bgImage);
   }
 
   @Override
@@ -68,7 +90,7 @@ public class Shootorial implements Game, Keyboard.Listener {
 
   @Override
   public int updateRate() {
-    return 25;
+    return 30;
   }
 
   @Override

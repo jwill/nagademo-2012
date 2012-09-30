@@ -28,7 +28,7 @@ public class EnemyShipManager {
       @Override
       public void done() {
         log().debug("spawning.");
-        spawning = true;
+        setSpawn(true);
         spawn();
       }
       @Override
@@ -48,13 +48,14 @@ public class EnemyShipManager {
   }
 
   public void spawn() {
-    enemies.add(new EnemyShip());
+    enemies.add(new EnemyShip(heroShip));
     currentTime = 0;
   }
 
   // whether to spawn enemy ships or not
   public void setSpawn(boolean state) {
     this.spawning = state;
+    this.currentTime = 0;
   }
 
   public void killShip(EnemyShip ship) {
@@ -74,47 +75,25 @@ public class EnemyShipManager {
     }
 
     ArrayList bullets = heroShip.getBullets();    
-    Iterator<EnemyShip> iter = enemies.iterator();
-    Iterator<Bullet> bulletIter = bullets.iterator();    
     for (Object obj : enemies.toArray()) {
     //while(iter.hasNext()) {
       EnemyShip enemy = (EnemyShip)obj;
-      if (heroShip.checkCollision(enemy)) {
-        enemy.isMoving(false);
-        enemy.getLayer().setVisible(false);
-        if (enemy.getBullets().size() == 0)
-          enemies.remove(enemy);
-        Point p = enemy.getPosition();
-        explosion.spawnExplosion(p.x(),p.y());
-      }
       for (Object obj2 : bullets.toArray()) {
-      //while(bulletIter.hasNext()) {
         Bullet bullet = (Bullet)obj2;
         if (heroShip.checkBulletCollision(bullet, enemy)) {
           enemy.isMoving(false);
           enemy.getLayer().setVisible(false);
-          if (enemy.getBullets().size() == 0)
-            enemies.remove(enemy);
+          enemy.getLayer().destroy();
           Point p = enemy.getPosition();
           explosion.spawnExplosion(p.x(),p.y());
         }
       }
-      // Enemy's bullets
-      ArrayList enemyBullets = enemy.getBullets();
-      Iterator<Bullet> enemyBulletIter = enemyBullets.iterator();
-      for (Object obj3 : enemyBullets.toArray()) {
-      //while(enemyBulletIter.hasNext()) {
-        Bullet bullet = (Bullet)obj3;
-        if (enemy.checkBulletCollision(bullet, heroShip)) {
-          bullet.destroy();
-          enemyBullets.remove(bullet);
-        }
-      }
+    
 
         
       
 
-      if (enemy.destroyed()) {
+      if (enemy.destroyed() && enemy.getBullets().size() == 0 ) {
         enemies.remove(enemy);
       }
       enemy.update(delta);

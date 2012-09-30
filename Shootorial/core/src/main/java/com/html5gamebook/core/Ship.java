@@ -89,8 +89,8 @@ public class Ship {
       }
 
       Iterator<Bullet> iter = bullets.iterator();
-      while(iter.hasNext()) {
-        Bullet bullet = (Bullet)iter.next();
+      for (Object obj : bullets.toArray()) {
+        Bullet bullet = (Bullet)obj;
         if (bullet.destroyed()) {
           bullets.remove(bullet);
         }
@@ -141,6 +141,8 @@ public class Ship {
     Transform t = enemy.getTransform();
     Transform b = bullet.getTransform();
     Point point = enemy.getPosition();
+    try {
+    if (enemy.getLayer() == null) return false;
     // tweak to catch edge case
     if ((t.ty()-10 <= b.ty()) && ((t.ty() + enemy.getLayer().height()) >= b.ty())) {
       if ( (t.tx() <= b.tx()) && ((t.tx()+enemy.getLayer().width() ) >= b.tx()) ) {
@@ -149,6 +151,7 @@ public class Ship {
         return true;
       }
     }
+    } catch (Exception ex) {}
     return false;
   }
 

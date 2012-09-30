@@ -19,10 +19,11 @@ public class Explosion {
     
 
     public Explosion() {
-        image = assets().getImage(IMAGE);
+        if (Explosion.image == null) {
+        Explosion.image = assets().getImage(IMAGE);
 
         // Callback for image load
-        image.addCallback(new ResourceCallback<Image>() {
+        Explosion.image.addCallback(new ResourceCallback<Image>() {
             @Override
             public void done(Image image) {
                 makeSubImages(image);
@@ -34,6 +35,7 @@ public class Explosion {
                 //To change body of implemented methods use File | Settings | File Templates.
             }
         });
+        }
     }
 
     void makeSubImages(Image image) {

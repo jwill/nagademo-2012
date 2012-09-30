@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 
 import pythagoras.f.Transform;
+import pythagoras.f.Point;
+
 
 
 public class EnemyShip {
@@ -21,16 +23,18 @@ public class EnemyShip {
   int shootInterval;
   int currentTime = 0;
   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-  
+  Ship heroShip;
+  Explosion explosion = new Explosion();
 
 
-  public EnemyShip() {
+  public EnemyShip(Ship heroShip) {
      final float x = graphics().width()+200;
      final float y = (float)Math.random() * 300;
-     shootInterval = (int)Math.random()*500 + 1000;
+     shootInterval = (int)Math.random()*500 + 1500;
      velocity = (float)Math.random() * 5 + 5;
      Image image = assets().getImage(IMAGE);
      layer = graphics().createImageLayer(image);
+     this.heroShip = heroShip;
 
      // Callback for image load
      image.addCallback(new ResourceCallback<Image>() {
@@ -79,21 +83,29 @@ public class EnemyShip {
       }
     }
 
-    Iterator<Bullet> iter = bullets.iterator();
     for (Object b : bullets.toArray()) {
-    //while(iter.hasNext()) {
-      Bullet bullet = (Bullet)b;
-      if (bullet.destroyed()) {
-        bullets.remove(bullet);
+        Bullet bullet = (Bullet)b;
+        if (checkBulletCollision(bullet, heroShip)) {
+          bullet.destroy();
+          bullets.remove(bullet);
+        }
+        bullet.update(delta);
       }
-      bullet.update(delta);
 
-    }
+     if (heroShip != null && heroShip.checkCollision(this)) {
+        isMoving(false);
+        getLayer().setVisible(false);
+        getLayer().destroy();
+        Point p = getPosition();
+        explosion.spawnExplosion(p.x(),p.y());
+      }
+
+    
 
 
     currentTime += delta;
     if (currentTime >= shootInterval && getLayer().visible()) {
-      //Spawn new enemy
+      //Shoot
       shoot();
       currentTime = 0;
     }
@@ -105,6 +117,7 @@ public class EnemyShip {
   }
 
   public boolean checkBulletCollision(Bullet bullet, Ship enemy) {
+    if (enemy == null || bullet == null) return false;
     Transform t = enemy.getTransform();
     Transform b = bullet.getTransform();
     // tweak to catch edge case

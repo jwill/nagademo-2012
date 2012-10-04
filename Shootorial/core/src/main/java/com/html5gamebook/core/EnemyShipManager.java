@@ -14,13 +14,13 @@ public class EnemyShipManager {
   private int spawnTime, currentTime;
   private boolean spawning;
   private Ship heroShip;
-  private Explosion explosion;
+  private static Explosion explosion;
   private ArrayList<EnemyShip> enemies;
   private AssetWatcher assetWatcher;
 
   public EnemyShipManager() {
     enemies = new ArrayList<EnemyShip>();
-    spawnTime = 1500;
+    spawnTime = 1000;
     currentTime = 0;
     spawning = false;
     explosion = new Explosion();
@@ -40,11 +40,16 @@ public class EnemyShipManager {
     assetWatcher.add(assets().getImage("images/enemyShip.png"));
     assetWatcher.add(assets().getImage("images/explosion_2.png"));
     assetWatcher.add(assets().getImage("images/enemy-bullet.png"));
+    assetWatcher.add(assets().getImage("images/bullet.png"));
     assetWatcher.start();
   }
 
   public void setSpawnTime(int time) {
     this.spawnTime = time;
+  }
+
+  public static void spawnExplosion(float x, float y) {
+    explosion.spawnExplosion(x,y);
   }
 
   public void spawn() {

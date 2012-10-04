@@ -24,14 +24,13 @@ public class EnemyShip {
   int currentTime = 0;
   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
   Ship heroShip;
-  Explosion explosion = new Explosion();
 
 
   public EnemyShip(Ship heroShip) {
      final float x = graphics().width()+200;
-     final float y = (float)Math.random() * 300;
-     shootInterval = (int)Math.random()*500 + 1500;
-     velocity = (float)Math.random() * 5 + 5;
+     final float y = random() * 300;
+     shootInterval = (int)(random()*500 + 1500);
+     velocity = random() * 5 + 5;
      Image image = assets().getImage(IMAGE);
      layer = graphics().createImageLayer(image);
      this.heroShip = heroShip;
@@ -97,7 +96,7 @@ public class EnemyShip {
         getLayer().setVisible(false);
         getLayer().destroy();
         Point p = getPosition();
-        explosion.spawnExplosion(p.x(),p.y());
+        EnemyShipManager.spawnExplosion(p.x(),p.y());
       }
 
     

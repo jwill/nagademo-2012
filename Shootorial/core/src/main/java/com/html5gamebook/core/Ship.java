@@ -126,7 +126,6 @@ public class Ship {
     // tweak to catch edge case
     if ((t.ty()-20 <= point.y()) && ((t.ty() + layer.height()) >= point.y())) {
       if ( (t.tx() <= point.x()) && ((t.tx()+layer.width() ) >= point.x()) ) {
-        log().debug("collided "+point);
         return true;
       }
     }

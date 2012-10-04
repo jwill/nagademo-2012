@@ -17,7 +17,6 @@ public class Shootorial implements Game, Keyboard.Listener {
   Ship ship;
   float position = 0, percentDone =0, duration = 15000;
   EnemyShipManager enemyManager = new EnemyShipManager();
-  private SurfaceLayer layer;
  // Image bgImage;
 
   @Override
@@ -32,7 +31,7 @@ public class Shootorial implements Game, Keyboard.Listener {
   //  layer = graphics().createSurfaceLayer(graphics().width(), graphics().height());
   //  graphics().rootLayer().add(layer);
 
-    graphics().rootLayer().add(graphics().createImmediateLayer(new ImmediateLayer.Renderer(){
+    ImmediateLayer layer = graphics().createImmediateLayer(new ImmediateLayer.Renderer(){
       public void render(Surface surf) {
         drawLayer(surf, bgImage);
       }
@@ -47,7 +46,10 @@ public class Shootorial implements Game, Keyboard.Listener {
           surf.drawImage(image, pixelsLeft-1, 0, pixelsToDraw, graphics().height(), 0, 0, pixelsToDraw, image.height());
         }
       }
-    }));
+    });
+
+    layer.setDepth(-5);
+    graphics().rootLayer().add(layer);
 
    // graphics().rootLayer().add(layer);
     ship = new Ship();

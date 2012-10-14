@@ -19,6 +19,12 @@
       <artifactId>playn-core</artifactId>
       <version>${playn.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-servlet</artifactId>
+      <version>2.4.0</version>
+    </dependency>
+
   </dependencies>
 
   <build>

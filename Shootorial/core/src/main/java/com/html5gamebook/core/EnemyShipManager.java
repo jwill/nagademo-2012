@@ -9,6 +9,7 @@ import pythagoras.f.Rectangle;
 import playn.core.AssetWatcher;
 
 import java.util.ArrayList;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 public class EnemyShipManager {
   private int spawnTime, currentTime;
@@ -17,6 +18,7 @@ public class EnemyShipManager {
   private static Explosion explosion;
   private ArrayList<EnemyShip> enemies;
   private AssetWatcher assetWatcher;
+  private static SimpleEventBus eventBus;
 
   public EnemyShipManager() {
     enemies = new ArrayList<EnemyShip>();
@@ -48,8 +50,9 @@ public class EnemyShipManager {
     this.spawnTime = time;
   }
 
-  public static void spawnExplosion(float x, float y) {
+  public static void spawnExplosion(EnemyShip enemy, float x, float y) {
     explosion.spawnExplosion(x,y);
+    eventBus.fireEvent(new EnemyKilledEvent(enemy));
   }
 
   public void spawn() {
@@ -65,11 +68,14 @@ public class EnemyShipManager {
 
   public void killShip(EnemyShip ship) {
     enemies.remove(ship);
-    // TODO Animation
   }
 
   public void setHeroShip(Ship ship) {
     this.heroShip = ship;
+  }
+
+  public void setEventBus(SimpleEventBus eventBus) {
+    this.eventBus = eventBus;
   }
 
   public void update(float delta) {

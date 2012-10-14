@@ -11,13 +11,16 @@ import java.util.Iterator;
 import playn.core.Keyboard;
 import playn.core.ImageLayer;
 import playn.core.ImmediateLayer;
+import com.google.gwt.event.shared.SimpleEventBus;
 
 
 public class Shootorial implements Game, Keyboard.Listener {
   Ship ship;
+  int score;
   float position = 0, percentDone =0, duration = 15000;
   EnemyShipManager enemyManager = new EnemyShipManager();
- // Image bgImage;
+  Controls controls = new Controls();
+  SimpleEventBus eventBus = new SimpleEventBus();
 
   @Override
   public void init() {
@@ -55,6 +58,18 @@ public class Shootorial implements Game, Keyboard.Listener {
     ship = new Ship();
    
     enemyManager.setHeroShip(ship);
+    enemyManager.setEventBus(eventBus);
+
+    eventBus.addHandler(EnemyKilledEvent.TYPE, new EnemyKilledHandler() {
+      @Override
+      public void onEnemyKilled(EnemyKilledEvent event) {
+        EnemyShip enemyShip = event.getEnemyShip();
+        if (enemyShip != null) {
+          score += 50;
+          log().debug(""+score);
+        }
+      }
+    });
   }
 
    public void drawLayer(Surface surf, Image image) {

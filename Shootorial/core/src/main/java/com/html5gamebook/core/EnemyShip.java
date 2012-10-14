@@ -96,7 +96,7 @@ public class EnemyShip {
         getLayer().setVisible(false);
         getLayer().destroy();
         Point p = getPosition();
-        EnemyShipManager.spawnExplosion(p.x(),p.y());
+        EnemyShipManager.spawnExplosion(this, p.x(),p.y());
       }
 
     

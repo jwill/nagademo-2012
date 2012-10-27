@@ -27,29 +27,29 @@ public class EnemyShip {
 
 
   public EnemyShip(Ship heroShip) {
-     final float x = graphics().width()+200;
-     final float y = random() * 300;
-     shootInterval = (int)(random()*500 + 1500);
-     velocity = random() * 5 + 5;
-     Image image = assets().getImage(IMAGE);
-     layer = graphics().createImageLayer(image);
-     this.heroShip = heroShip;
+    final float x = graphics().width()+200;
+    final float y = random() * graphics().height();
+    shootInterval = (int)(random()*500 + 1500);
+    velocity = random() * 5 + 5;
+    Image image = assets().getImage(IMAGE);
+    layer = graphics().createImageLayer(image);
+    this.heroShip = heroShip;
 
-     // Callback for image load
-     image.addCallback(new ResourceCallback<Image>() {
-         @Override
-         public void done(Image image) {
-            // layer.setOrigin(0, image.height() / 2f);
-             layer.setTranslation(x,y);
-             graphics().rootLayer().add(layer);
+    // Callback for image load
+    image.addCallback(new ResourceCallback<Image>() {
+      @Override
+      public void done(Image image) {
+        // layer.setOrigin(0, image.height() / 2f);
+        layer.setTranslation(x,y);
+        graphics().rootLayer().add(layer);
 
-         }
+      }
 
-         @Override
-         public void error(Throwable throwable) {
-             log().error("Error loading image!", throwable);
-         }
-     });
+    @Override
+    public void error(Throwable throwable) {
+      log().error("Error loading image!", throwable);
+    }
+    });
   }
 
   public Transform getTransform() {
@@ -69,8 +69,8 @@ public class EnemyShip {
   public void isMoving(boolean state) { isMoving = state; }
 
   public void shoot() {
-        Bullet b = new Bullet(getTransform().tx() - 45, getTransform().ty() + 3, false);
-        bullets.add(b);
+    Bullet b = new Bullet(getTransform().tx() - 45, getTransform().ty() + 3, false);
+    bullets.add(b);
   }
 
 
@@ -83,23 +83,23 @@ public class EnemyShip {
     }
 
     for (Object b : bullets.toArray()) {
-        Bullet bullet = (Bullet)b;
-        if (checkBulletCollision(bullet, heroShip)) {
-          bullet.destroy();
-          bullets.remove(bullet);
-        }
-        bullet.update(delta);
+      Bullet bullet = (Bullet)b;
+      if (checkBulletCollision(bullet, heroShip)) {
+        bullet.destroy();
+        bullets.remove(bullet);
       }
+      bullet.update(delta);
+    }
 
-     if (heroShip != null && heroShip.checkCollision(this)) {
-        isMoving(false);
-        getLayer().setVisible(false);
-        getLayer().destroy();
-        Point p = getPosition();
-        EnemyShipManager.spawnExplosion(this, p.x(),p.y());
-      }
+    if (heroShip != null && heroShip.checkCollision(this)) {
+      isMoving(false);
+      getLayer().setVisible(false);
+      getLayer().destroy();
+      Point p = getPosition();
+      EnemyShipManager.spawnExplosion(this, p.x(),p.y());
+    }
 
-    
+
 
 
     currentTime += delta;
@@ -111,7 +111,7 @@ public class EnemyShip {
 
   }
 
-   public ArrayList<Bullet> getBullets() {
+  public ArrayList<Bullet> getBullets() {
     return bullets;
   }
 
@@ -134,7 +134,7 @@ public class EnemyShip {
 
 
   public ImageLayer getLayer() {
-     return layer;
+    return layer;
   }
 
 }

@@ -4,12 +4,12 @@ package com.html5gamebook.core;
 import java.util.*;
 import static playn.core.PlayN.*;
 import playn.core.*;
-import org.json.*;
+import playn.core.json.*;
 
 public class CardSpriteSheet implements AssetWatcher.Listener, ResourceCallback<String> {
   AssetWatcher assetWatcher;
   HashMap<String,Image> objects;
-  JSONArray definitionList;
+  Json.Array definitionList;
 
   String filename;
   Image image;
@@ -28,17 +28,17 @@ public class CardSpriteSheet implements AssetWatcher.Listener, ResourceCallback<
     try {
      objects = new HashMap<String, Image>();
      for (int i = 0; i<definitionList.length(); i++) {
-       JSONObject obj = definitionList.getJSONObject(i);
+       Json.Object obj = definitionList.getObject(i);
        Image region = image.subImage(obj.getInt("x"), obj.getInt("y"), obj.getInt("width"), obj.getInt("height"));
        objects.put(obj.getString("name"), region);
      }
-    } catch(JSONException ex) {}
+    } catch(JsonParserException ex) {}
   }
 
   public void done(String resource) {
     try {
-      definitionList = new JSONArray(resource);
-    } catch(JSONException ex) {
+      definitionList = json().parseArray(resource);
+    } catch(JsonParserException ex) {
       ex.printStackTrace();
     }
   }

@@ -17,86 +17,85 @@ import java.util.ArrayList;
 
 
 public class Ship {
-   public static String IMAGE = "images/ship.png";
-   int shotMax = 8;   
-   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
-   private ImageLayer layer;
+  public static String IMAGE = "images/ship.png";
+  int shotMax = 8;   
+  ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+  private ImageLayer layer;
 
-   private int velocity = 10;   
-   private boolean isMoving = false;
-   private Key direction = null;
+  private int velocity = 10;   
+  private boolean isMoving = false;
+  private Key direction = null;
 
-   public Ship() {
-     Image image = assets().getImage(IMAGE);
-     layer = graphics().createImageLayer(image);
+  public Ship() {
+    Image image = assets().getImage(IMAGE);
+    layer = graphics().createImageLayer(image);
 
-     // Callback for image load
-     image.addCallback(new ResourceCallback<Image>() {
-         @Override
-         public void done(Image image) {
-            // layer.setOrigin(0, image.height() / 2f);
-             layer.setTranslation(0,0);
-             graphics().rootLayer().add(layer);
-         }
-
-         @Override
-         public void error(Throwable throwable) {
-             log().error("Error loading image!", throwable);
-         }
-     });
-   }
-
-   public boolean isMoving() { return isMoving;}
-   public void isMoving(boolean state) { isMoving = state; }
-   public Key getDirection() { return direction; }
-   public void setDirection(Key direction) { 
-     if (direction != null) 
-       isMoving(true);
-     else isMoving(false);
-     this.direction = direction; 
-   
-   }
-
-   public ImageLayer getLayer() {
-     return layer;
-   }
-
-    public void shoot() {
-      if(bullets.size() < shotMax) {
-        Bullet b = new Bullet(getTransform().tx() + 75, getTransform().ty() + 3, true);
-        bullets.add(b);
-
+    // Callback for image load
+    image.addCallback(new ResourceCallback<Image>() {
+      @Override
+      public void done(Image image) {
+        // layer.setOrigin(0, image.height() / 2f);
+        layer.setTranslation(0,0);
+        graphics().rootLayer().add(layer);
       }
+
+    @Override
+    public void error(Throwable throwable) {
+      log().error("Error loading image!", throwable);
     }
+    });
+  }
+
+  public boolean isMoving() { return isMoving;}
+  //public void isMoving(boolean state) { isMoving = state; }
+  public Key getDirection() { return direction; }
+  public void setDirection(Key direction) { 
+    if (direction != null) 
+      isMoving = true;
+    else isMoving = false;
+    this.direction = direction; 
+
+  }
+
+  public ImageLayer getLayer() {
+    return layer;
+  }
+
+  public void shoot() {
+    if(bullets.size() < shotMax) {
+      Bullet b = new Bullet(getTransform().tx() + 75, getTransform().ty() + 3, true);
+      bullets.add(b);
+
+    }
+  }
 
 
   public void update(float delta) {
-      if (isMoving) {
-        switch(direction) {
-          case UP:
-            moveY(-velocity);
-            break;
-          case DOWN:
-            moveY(velocity);
-            break;
-          case RIGHT:
-            moveX(velocity);
-            break;
-          case LEFT:
-            moveX(-velocity);
-            break;
-        }
+    if (isMoving) {
+      switch(direction) {
+        case UP:
+          moveY(-velocity);
+          break;
+        case DOWN:
+          moveY(velocity);
+          break;
+        case RIGHT:
+          moveX(velocity);
+          break;
+        case LEFT:
+          moveX(-velocity);
+          break;
       }
+    }
 
-      Iterator<Bullet> iter = bullets.iterator();
-      for (Object obj : bullets.toArray()) {
-        Bullet bullet = (Bullet)obj;
-        if (bullet.destroyed()) {
-          bullets.remove(bullet);
-        }
-        bullet.update(delta);
-
+    for (Object obj : bullets.toArray()) {
+      Bullet bullet = (Bullet)obj;
+      if (bullet.destroyed()) {
+        bullets.remove(bullet);
       }
+      bullet.update(delta);
+
+    }
 
   }
 
@@ -141,15 +140,15 @@ public class Ship {
     Transform b = bullet.getTransform();
     Point point = enemy.getPosition();
     try {
-    if (enemy.getLayer() == null) return false;
-    // tweak to catch edge case
-    if ((t.ty()-10 <= b.ty()) && ((t.ty() + enemy.getLayer().height()) >= b.ty())) {
-      if ( (t.tx() <= b.tx()) && ((t.tx()+enemy.getLayer().width() ) >= b.tx()) ) {
-        bullet.destroy();
-        bullets.remove(bullet);
-        return true;
+      if (enemy.getLayer() == null) return false;
+      // tweak to catch edge case
+      if ((t.ty()-10 <= b.ty()) && ((t.ty() + enemy.getLayer().height()) >= b.ty())) {
+        if ( (t.tx() <= b.tx()) && ((t.tx()+enemy.getLayer().width() ) >= b.tx()) ) {
+          bullet.destroy();
+          bullets.remove(bullet);
+          return true;
+        }
       }
-    }
     } catch (Exception ex) {}
     return false;
   }

@@ -7,7 +7,6 @@ import playn.core.Game;
 import playn.core.Image;
 import playn.core.Surface;
 import playn.core.SurfaceLayer;
-import java.util.Iterator;
 import playn.core.Keyboard;
 import playn.core.ImageLayer;
 import playn.core.ImmediateLayer;
@@ -19,20 +18,17 @@ public class Shootorial implements Game, Keyboard.Listener {
   int score;
   float position = 0, percentDone =0, duration = 15000;
   EnemyShipManager enemyManager = new EnemyShipManager();
-  Controls controls = new Controls();
+  //Controls controls = new Controls();
   SimpleEventBus eventBus = new SimpleEventBus();
 
   @Override
   public void init() {
     final Image bgImage = assets().getImage("images/scrollingBackground.jpeg");
-    
+
     graphics().setSize(640,300);
     // create and add background image layer
-       
-    keyboard().setListener(this);
 
-  //  layer = graphics().createSurfaceLayer(graphics().width(), graphics().height());
-  //  graphics().rootLayer().add(layer);
+    keyboard().setListener(this);
 
     ImmediateLayer layer = graphics().createImmediateLayer(new ImmediateLayer.Renderer(){
       public void render(Surface surf) {
@@ -54,9 +50,9 @@ public class Shootorial implements Game, Keyboard.Listener {
     layer.setDepth(-5);
     graphics().rootLayer().add(layer);
 
-   // graphics().rootLayer().add(layer);
+    // graphics().rootLayer().add(layer);
     ship = new Ship();
-   
+
     enemyManager.setHeroShip(ship);
     enemyManager.setEventBus(eventBus);
 
@@ -71,19 +67,6 @@ public class Shootorial implements Game, Keyboard.Listener {
       }
     });
   }
-
-   public void drawLayer(Surface surf, Image image) {
-        float startX = percentDone * image.width();
-        float pixelsLeft = image.width() - startX;
-
-        // Signature is flipped from Canvas
-        surf.drawImage(image, 0, 0, pixelsLeft, graphics().height(), startX, 0, pixelsLeft, image.height());
-        if (pixelsLeft < graphics().width()) {
-          float pixelsToDraw = image.width() - pixelsLeft;
-          surf.drawImage(image, pixelsLeft-1, 0, pixelsToDraw, graphics().height(), 0, 0, pixelsToDraw, image.height());
-        }
-      }
-
 
   @Override
   public void paint(float alpha) {
@@ -124,17 +107,17 @@ public class Shootorial implements Game, Keyboard.Listener {
 
   @Override
   public void onKeyTyped(Keyboard.TypedEvent event) {
-      // Does nothing.
+    // Does nothing.
   }
 
   @Override
   public void onKeyUp(Keyboard.Event event) {
-      // Does nothing.
-      switch(event.key()) {
-        case UP:case DOWN: case RIGHT: case LEFT:
+    // Does nothing.
+    switch(event.key()) {
+      case UP:case DOWN: case RIGHT: case LEFT:
         ship.setDirection(null);
         break;
-      }
+    }
 
   }
 

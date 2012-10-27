@@ -33,12 +33,12 @@ public class EnemyShipManager {
         setSpawn(true);
         spawn();
       }
-      @Override
-      public void error(Throwable e) {
-        log().debug(e.toString());
-      }
+    @Override
+    public void error(Throwable e) {
+      log().debug(e.toString());
+    }
     });
-    
+
     assetWatcher.add(assets().getImage("images/enemyShip.png"));
     assetWatcher.add(assets().getImage("images/explosion_2.png"));
     assetWatcher.add(assets().getImage("images/enemy-bullet.png"));
@@ -87,7 +87,7 @@ public class EnemyShipManager {
 
     ArrayList bullets = heroShip.getBullets();    
     for (Object obj : enemies.toArray()) {
-    //while(iter.hasNext()) {
+      //while(iter.hasNext()) {
       EnemyShip enemy = (EnemyShip)obj;
       for (Object obj2 : bullets.toArray()) {
         Bullet bullet = (Bullet)obj2;
@@ -99,10 +99,6 @@ public class EnemyShipManager {
           explosion.spawnExplosion(p.x(),p.y());
         }
       }
-    
-
-        
-      
 
       if (enemy.destroyed() && enemy.getBullets().size() == 0 ) {
         enemies.remove(enemy);
@@ -111,7 +107,7 @@ public class EnemyShipManager {
 
     }
 
-    
-  }
 
   }
+
+}

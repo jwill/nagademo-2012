@@ -1,7 +1,6 @@
 package com.html5gamebook.core;
 
 import static playn.core.PlayN.*;
-
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.GroupLayer;
@@ -17,28 +16,28 @@ public class Bullet {
   boolean isHero = false;
 
   public Bullet(final float x, final float y, boolean isHero) {
-     Image image;
-     this.isHero = isHero;
-     if (isHero)
+    Image image;
+    this.isHero = isHero;
+    if (isHero)
       image = assets().getImage(IMAGE);
-     else image = assets().getImage(ALTERNATE_IMAGE);
-     layer = graphics().createImageLayer(image);
+    else image = assets().getImage(ALTERNATE_IMAGE);
+    layer = graphics().createImageLayer(image);
 
-     // Callback for image load
-     image.addCallback(new ResourceCallback<Image>() {
-         @Override
-         public void done(Image image) {
-            // layer.setOrigin(0, image.height() / 2f);
-             layer.setTranslation(x,y);
-             layer.setScale(0.5f);
-             graphics().rootLayer().add(layer);
-         }
+    // Callback for image load
+    image.addCallback(new ResourceCallback<Image>() {
+      @Override
+      public void done(Image image) {
+        // layer.setOrigin(0, image.height() / 2f);
+        layer.setTranslation(x,y);
+        layer.setScale(0.5f);
+        graphics().rootLayer().add(layer);
+      }
 
-         @Override
-         public void error(Throwable throwable) {
-             log().error("Error loading image!", throwable);
-         }
-     });
+    @Override
+    public void error(Throwable throwable) {
+      log().error("Error loading image!", throwable);
+    }
+    });
 
   }
 

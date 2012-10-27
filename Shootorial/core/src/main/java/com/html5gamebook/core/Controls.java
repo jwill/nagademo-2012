@@ -41,12 +41,12 @@ public class Controls extends Touch.Adapter implements AssetWatcher.Listener {
   public Layer getTriggerControl() {
     return triggerControlLayer;
   }
-  
+
   @Override
   public void onTouchStart(Touch.Event[] touches) {
 
   }
-  
+
   @Override
   public void onTouchEnd(Touch.Event[] touches) {
 
@@ -54,13 +54,14 @@ public class Controls extends Touch.Adapter implements AssetWatcher.Listener {
 
   @Override
   public void onTouchMove(Touch.Event[] touches) {
+    log().debug("moved");
 
   }
 
   @Override
   public void done() {
     log().debug("Finished loading.");
-    
+
     innerControlLayer = graphics().createImageLayer(innerControl);
     outerControlLayer = graphics().createImageLayer(outerControl);
 

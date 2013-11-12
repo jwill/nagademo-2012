@@ -9,14 +9,18 @@ import playn.core.ImageLayer;
 import playn.core.Surface;
 import playn.core.ImmediateLayer;
 
-public class Parallax implements Game {
+public class Parallax extends Game.Default {
   GroupLayer rootLayer = graphics().rootLayer();
   private float position = 0, duration = 2500, percentDone = 0;
+  
+  public Parallax() {
+    super(33);
+  }
 
   @Override
   public void init() {
 
-    graphics().setSize(320,200);
+    //graphics().setSize(320,200);
     // create and add background image layer
     final Image layer0Image = assets().getImage("images/Parallax-scroll-example-layer-0.gif");
     final Image layer1Image = assets().getImage("images/Parallax-scroll-example-layer-1.gif");
@@ -51,17 +55,12 @@ public class Parallax implements Game {
   }
 
   @Override
-  public void update(float delta) {
+  public void update(int delta) {
     position += delta;
     percentDone = (position) / duration;
     if (percentDone > 1) { 
       percentDone = 0;
       position = 0;
     }
-  }
-
-  @Override
-  public int updateRate() {
-    return 25;
   }
 }

@@ -8,8 +8,11 @@ import com.html5gamebook.core.Parallax;
 public class ParallaxJava {
 
   public static void main(String[] args) {
-    JavaPlatform platform = JavaPlatform.register();
-    platform.assets().setPathPrefix("com/html5gamebook/resources");
+    JavaPlatform.Config config = new JavaPlatform.Config();
+    config.width = 300;
+    config.height = 200;
+    // use config to customize the Java platform, if needed
+    JavaPlatform.register(config);
     PlayN.run(new Parallax());
   }
 }

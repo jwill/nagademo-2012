@@ -1,5 +1,6 @@
 <module rename-to='Parallax'>
   <inherits name='playn.PlayN'/>
+  <inherits name='ParallaxAssets'/>
 
   <source path='core'/>
   <source path='html'/>

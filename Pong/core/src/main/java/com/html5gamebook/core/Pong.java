@@ -5,13 +5,17 @@ import static playn.core.PlayN.*;
 import playn.core.*;
 import pythagoras.f.Transform;
 
-public class Pong implements Game, Keyboard.Listener {
-    Ball ball;
-    Paddle paddleOne, paddleTwo;
+public class Pong extends Game.Default implements Keyboard.Listener {
+  Ball ball;
+  Paddle paddleOne, paddleTwo;
 
-    @Override
-    public void init() {
-        GroupLayer g = graphics().createGroupLayer();
+  public Pong() {
+    super(33); // call update every 33ms (30 times per second)
+  }
+
+  @Override
+  public void init() {
+    GroupLayer g = graphics().createGroupLayer();
         ball = new Ball(g, graphics().width()/2, graphics().height()/2);
         paddleOne = new Paddle(g, graphics().width() - 25, graphics().height() / 2f);
         paddleTwo = new Paddle(g, 25, graphics().height() / 2f);
@@ -23,15 +27,9 @@ public class Pong implements Game, Keyboard.Listener {
         graphics().rootLayer().add(g);
 
         keyboard().setListener(this);
-    }
+  }
 
-    @Override
-    public void paint(float alpha) {
-        // the background automatically paints itself, so no need to do anything here!
-    }
-
-    @Override
-    public void update(float delta) {
+    public void update(int delta) {
         //
         Transform b = ball.getTransform(), p1 = paddleOne.getTransform(), p2 = paddleTwo.getTransform();
         float height = paddleOne.getHeight() / 2;
@@ -47,12 +45,12 @@ public class Pong implements Game, Keyboard.Listener {
         paddleTwo.update(delta);
     }
 
-    @Override
-    public int updateRate() {
-        return 25;
-    }
+  @Override
+  public void paint(float alpha) {
+    // the background automatically paints itself, so no need to do anything here!
+  }
 
-    @Override
+      @Override
     public void onKeyDown(Keyboard.Event event) {
         if (event.key().equals(Key.UP)) {
             if (paddleOne.getY() > 0)
@@ -87,6 +85,5 @@ public class Pong implements Game, Keyboard.Listener {
     public void onKeyUp(Keyboard.Event event) {
         // Does nothing.
     }
-
 
 }

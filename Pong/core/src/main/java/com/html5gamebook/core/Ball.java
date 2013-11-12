@@ -5,7 +5,7 @@ import static playn.core.PlayN.*;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.ResourceCallback;
+import playn.core.util.Callback;
 import pythagoras.f.Transform;
 
 public class Ball {
@@ -20,16 +20,16 @@ public class Ball {
        pickDirection();
 
        // Callback for image load
-       image.addCallback(new ResourceCallback<Image>() {
+       image.addCallback(new Callback<Image>() {
            @Override
-           public void done(Image image) {
+           public void onSuccess(Image image) {
                layer.setOrigin(image.width() / 2f, image.height() / 2f);
                layer.setTranslation(x,y);
                parentLayer.add(layer);
            }
 
            @Override
-           public void error(Throwable throwable) {
+           public void onFailure(Throwable throwable) {
                log().error("Error loading image!", throwable);
            }
        });

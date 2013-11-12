@@ -2,6 +2,7 @@ package com.html5gamebook.core;
 
 import playn.core.*;
 import pythagoras.f.Transform;
+import playn.core.util.Callback;
 
 import static playn.core.PlayN.*;
 
@@ -16,9 +17,9 @@ public class Paddle {
         layer = graphics().createImageLayer(image);
         final Paddle p = this;
         // Callback for image load
-        image.addCallback(new ResourceCallback<Image>() {
+        image.addCallback(new Callback<Image>() {
             @Override
-            public void done(Image image) {
+            public void onSuccess(Image image) {
                 layer.setOrigin(image.width() / 2f, image.height() / 2f);
                 layer.setTranslation(x, y);
                 p.height = image.height();
@@ -27,7 +28,7 @@ public class Paddle {
             }
 
             @Override
-            public void error(Throwable throwable) {
+            public void onFailure(Throwable throwable) {
                 log().error("Error loading image!", throwable);
             }
         });

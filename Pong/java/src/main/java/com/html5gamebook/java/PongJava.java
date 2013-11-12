@@ -8,8 +8,9 @@ import com.html5gamebook.core.Pong;
 public class PongJava {
 
   public static void main(String[] args) {
-    JavaPlatform platform = JavaPlatform.register();
-    platform.assets().setPathPrefix("com/html5gamebook/resources");
+    JavaPlatform.Config config = new JavaPlatform.Config();
+    // use config to customize the Java platform, if needed
+    JavaPlatform.register(config);
     PlayN.run(new Pong());
   }
 }

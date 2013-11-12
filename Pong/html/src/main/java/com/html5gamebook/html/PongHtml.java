@@ -10,7 +10,9 @@ public class PongHtml extends HtmlGame {
 
   @Override
   public void start() {
-    HtmlPlatform platform = HtmlPlatform.register();
+    HtmlPlatform.Config config = new HtmlPlatform.Config();
+    // use config to customize the HTML platform, if needed
+    HtmlPlatform platform = HtmlPlatform.register(config);
     platform.assets().setPathPrefix("Pong/");
     PlayN.run(new Pong());
   }

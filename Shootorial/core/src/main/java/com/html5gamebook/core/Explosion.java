@@ -4,7 +4,7 @@ import static playn.core.PlayN.*;
 
 import playn.core.Image;
 import playn.core.GroupLayer;
-import playn.core.ResourceCallback;
+import playn.core.util.Callback;
 import playn.core.Surface;
 import playn.core.ImmediateLayer;
 
@@ -23,15 +23,15 @@ public class Explosion {
       Explosion.image = assets().getImage(IMAGE);
 
       // Callback for image load
-      Explosion.image.addCallback(new ResourceCallback<Image>() {
+      Explosion.image.addCallback(new Callback<Image>() {
         @Override
-        public void done(Image image) {
+        public void onSuccess(Image image) {
           makeSubImages(image);
           log().debug("done loading");
         }
 
       @Override
-      public void error(Throwable throwable) {
+      public void onFailure(Throwable throwable) {
         //To change body of implemented methods use File | Settings | File Templates.
       }
       });
@@ -49,7 +49,7 @@ public class Explosion {
     }
   }
 
-  public void update(float delta) {
+  public void update(int delta) {
   }
 
   public void spawnExplosion(final float x, final float y) {

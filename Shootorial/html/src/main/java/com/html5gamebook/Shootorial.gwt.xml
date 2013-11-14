@@ -1,5 +1,6 @@
 <module rename-to='Shootorial'>
   <inherits name='playn.PlayN'/>
+  <inherits name='ShootorialAssets'/>
 
   <source path='core'/>
   <source path='html'/>

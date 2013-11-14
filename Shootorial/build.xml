@@ -3,13 +3,13 @@
   <!-- Define your project information here -->
   <property name="java.classname" value="com.html5gamebook.java.ShootorialJava"/>
   <property name="html.classname" value="com.html5gamebook.Shootorial"/>
-  <property name="html.index" value="Shootorial.html"/>
 
   <!-- Everything below here shouldn't need to be modified -->
   <!-- run 'ant -p' to see available targets -->
   <property name="src.dir"     value="src/main/java"/>
   <property name="war.dir"     value="src/main/webapp"/>
   <property name="target.dir"  value="target"/>
+  <property name="resource.dir" value="src/main/resources"/>
   <property name="classes.dir" value="${target.dir}/classes"/>
   <property name="webapp.dir"  value="${target.dir}/webapp"/>
 
@@ -18,7 +18,7 @@
   <property name="maven-ant.dir" value="${user.home}/.m2/ant-support"/>
   <property name="maven-ant.jar" value="${maven-ant.dir}/maven-ant-tasks-${maven-ant.vers}.jar"/>
   <property name="maven-ant.url"
-            value="http://mirrors.ibiblio.org/pub/mirrors/apache/maven/binaries"/>
+            value="http://mirrors.ibiblio.org/apache/maven/ant-tasks/${maven-ant.vers}/binaries"/>
   <condition property="maven-ant.exists"><available file="${maven-ant.jar}"/></condition>
   <target name="-download-maven-ant" unless="maven-ant.exists">
     <mkdir dir="${maven-ant.dir}"/>
@@ -55,6 +55,8 @@
     <artifact:dependencies pathId="html-extras.classpath">
       <dependency groupId="com.googlecode.playn" artifactId="playn-html"
                   version="${pom.properties.playn.version}"/>
+      <dependency groupId="com.googlecode.playn" artifactId="playn-html"
+                  version="${pom.properties.playn.version}" classifier="sources"/>
       <dependency groupId="com.google.gwt" artifactId="gwt-dev"
                   version="${pom.properties.gwt.version}"/>
     </artifact:dependencies>
@@ -105,7 +107,7 @@
     </javac>
     <!-- copy all of our resources into the classes directory -->
     <copy todir="${classes.dir}">
-      <fileset dir="core/${src.dir}" includes="**" excludes="**/*.java"/>
+      <fileset dir="assets/${resource.dir}"/>
     </copy>
   </target>
 
@@ -146,7 +148,7 @@
     </artifact:dependencies>
     <taskdef classpathref="jetty-ant.classpath" resource="tasks.properties"/>
     <echo>=================================================================</echo>
-    <echo>Browse to http://localhost:8080/${ant.project.name}/${html.index}</echo>
+    <echo>Browse to http://localhost:8080/${ant.project.name}/</echo>
     <echo>=================================================================</echo>
     <jetty tempDirectory="${target.dir}/jetty-temp">
       <webApp name="html-server" warfile="${target.dir}/webapp" contextpath="/${ant.project.name}"/>
@@ -170,13 +172,13 @@
       <arg value="-war"/>
       <arg value="${target.dir}/webapp"/>
       <arg value="-startupUrl"/>
-      <arg value="${html.index}"/>
+      <arg value="index.html"/>
       <arg value="${html.classname}"/>
     </java>
   </target>
 
   <target name="run-java" depends="compile" description="Runs game in JVM.">
-    <java fork="true" dir="core" classname="${java.classname}">
+    <java fork="true" dir="java" classname="${java.classname}">
       <classpath>
         <pathelement location="${classes.dir}"/>
         <path refid="java.classpath"/>

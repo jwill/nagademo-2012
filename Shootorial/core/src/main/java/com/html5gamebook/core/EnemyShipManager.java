@@ -78,7 +78,7 @@ public class EnemyShipManager {
     this.eventBus = eventBus;
   }
 
-  public void update(float delta) {
+  public void update(int delta) {
     currentTime += delta;
     if (currentTime >= spawnTime && spawning) {
       //Spawn new enemy

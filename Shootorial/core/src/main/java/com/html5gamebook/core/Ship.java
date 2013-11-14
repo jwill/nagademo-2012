@@ -8,7 +8,7 @@ import static playn.core.Key.*;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImageLayer;
-import playn.core.ResourceCallback;
+import playn.core.util.Callback;
 import pythagoras.f.Transform;
 import pythagoras.f.Point;
 import java.util.Iterator;
@@ -31,16 +31,16 @@ public class Ship {
     layer = graphics().createImageLayer(image);
 
     // Callback for image load
-    image.addCallback(new ResourceCallback<Image>() {
+    image.addCallback(new Callback<Image>() {
       @Override
-      public void done(Image image) {
+      public void onSuccess(Image image) {
         // layer.setOrigin(0, image.height() / 2f);
         layer.setTranslation(0,0);
         graphics().rootLayer().add(layer);
       }
 
     @Override
-    public void error(Throwable throwable) {
+    public void onFailure(Throwable throwable) {
       log().error("Error loading image!", throwable);
     }
     });
@@ -70,7 +70,7 @@ public class Ship {
   }
 
 
-  public void update(float delta) {
+  public void update(int delta) {
     if (isMoving) {
       switch(direction) {
         case UP:

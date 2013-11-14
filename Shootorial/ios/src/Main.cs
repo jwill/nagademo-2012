@@ -12,8 +12,9 @@ namespace com.html5gamebook
   public partial class AppDelegate : IOSApplicationDelegate {
     public override bool FinishedLaunching (UIApplication app, NSDictionary options) {
       app.SetStatusBarHidden(true, true);
-      var pf = IOSPlatform.register(app, IOSPlatform.SupportedOrients.PORTRAITS);
-      pf.assets().setPathPrefix("assets");
+      var pconfig = new IOSPlatform.Config();
+      // use pconfig to customize iOS platform, if needed
+      IOSPlatform.register(app, pconfig);
       PlayN.run(new Shootorial());
       return true;
     }

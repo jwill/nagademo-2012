@@ -4,7 +4,7 @@ import static playn.core.PlayN.*;
 import playn.core.Image;
 import playn.core.ImageLayer;
 import playn.core.GroupLayer;
-import playn.core.ResourceCallback;
+import playn.core.util.Callback;
 
 import pythagoras.f.Transform;
 
@@ -24,9 +24,9 @@ public class Bullet {
     layer = graphics().createImageLayer(image);
 
     // Callback for image load
-    image.addCallback(new ResourceCallback<Image>() {
+    image.addCallback(new Callback<Image>() {
       @Override
-      public void done(Image image) {
+      public void onSuccess(Image image) {
         // layer.setOrigin(0, image.height() / 2f);
         layer.setTranslation(x,y);
         layer.setScale(0.5f);
@@ -34,7 +34,7 @@ public class Bullet {
       }
 
     @Override
-    public void error(Throwable throwable) {
+    public void onFailure(Throwable throwable) {
       log().error("Error loading image!", throwable);
     }
     });
@@ -53,7 +53,7 @@ public class Bullet {
     return layer.destroyed();
   }
 
-  public void update(float delta) {
+  public void update(int delta) {
     if (isHero)
       getTransform().translateX(velocity);
     else getTransform().translateX(-velocity);

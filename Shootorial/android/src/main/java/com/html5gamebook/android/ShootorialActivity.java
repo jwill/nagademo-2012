@@ -9,7 +9,6 @@ public class ShootorialActivity extends GameActivity {
 
   @Override
   public void main(){
-    platform().assets().setPathPrefix("com/html5gamebook/resources");
     PlayN.run(new Shootorial());
   }
 }

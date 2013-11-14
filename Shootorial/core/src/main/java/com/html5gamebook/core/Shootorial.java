@@ -13,7 +13,7 @@ import playn.core.ImmediateLayer;
 import com.google.gwt.event.shared.SimpleEventBus;
 
 
-public class Shootorial implements Game, Keyboard.Listener {
+public class Shootorial extends Game.Default implements Keyboard.Listener {
   Ship ship;
   int score;
   float position = 0, percentDone =0, duration = 15000;
@@ -21,11 +21,15 @@ public class Shootorial implements Game, Keyboard.Listener {
   //Controls controls = new Controls();
   SimpleEventBus eventBus = new SimpleEventBus();
 
+  public Shootorial() {
+    super(33);
+  }
+    
   @Override
   public void init() {
     final Image bgImage = assets().getImage("images/scrollingBackground.jpeg");
 
-    graphics().setSize(640,300);
+    //graphics().setSize(640,300);
     // create and add background image layer
 
     keyboard().setListener(this);
@@ -75,7 +79,7 @@ public class Shootorial implements Game, Keyboard.Listener {
   }
 
   @Override
-  public void update(float delta) {
+  public void update(int delta) {
     // Parallax background
     position += delta;
     percentDone = (position) / duration;
@@ -86,11 +90,6 @@ public class Shootorial implements Game, Keyboard.Listener {
 
     ship.update(delta);
     enemyManager.update(delta);
-  }
-
-  @Override
-  public int updateRate() {
-    return 30;
   }
 
   @Override

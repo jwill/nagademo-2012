@@ -4,17 +4,17 @@
   <parent>
     <groupId>com.googlecode.playn</groupId>
     <artifactId>playn-project</artifactId>
-    <version>1.4</version>
+    <version>1.7.2</version>
   </parent>
 
   <groupId>com.html5gamebook</groupId>
   <artifactId>Shootorial</artifactId>
-  <version>0.1</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Shootorial Metaproject</name>
 
   <properties>
-    <playn.version>1.4</playn.version>
+    <playn.version>1.7.2</playn.version>
   </properties>
 
   <profiles>
@@ -40,8 +40,8 @@
       <modules><module>flash</module></modules>
     </profile>
   </profiles>
-
   <modules>
+    <module>assets</module>
     <module>core</module>
   </modules>
 </project>

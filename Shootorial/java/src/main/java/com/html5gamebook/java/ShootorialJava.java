@@ -15,14 +15,14 @@ public class ShootorialJava extends Shootorial {
   }
 
     public ShootorialJava() {
-	super();
-	handler = new ControllerHandler();
-	handler.setListener(this);
+	    super();
+	    handler = new ControllerHandler();
+	    handler.setListener(this);
     }
 
     @Override
     public void update(int delta) {
-	handler.processEvents();
-	super.update(delta);
+	    handler.processEvents();
+	    super.update(delta);
     }
 }

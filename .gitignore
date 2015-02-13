@@ -13,6 +13,7 @@ MirahExample/*/target/
 Sprites/*/target/
 Shootorial/*/target/
 Demo/*/target/
+Pong-old/*
 
 ## generic files to ignore
 *~

@@ -1,11 +1,10 @@
 package com.html5gamebook.core;
 
-import static playn.core.PlayN.*;
 
-import playn.core.GroupLayer;
+import playn.scene.GroupLayer;
 import playn.core.Image;
-import playn.core.ImageLayer;
-import playn.core.ResourceCallback;
+import playn.core.Platform;
+import playn.scene.ImageLayer;
 import pythagoras.f.Transform;
 
 public class Ball {
@@ -14,28 +13,17 @@ public class Ball {
    private Direction direction;
    private float x, y;
 
-   public Ball(final GroupLayer parentLayer, final float x, final float y) {
-       Image image = assets().getImage(IMAGE);
-       layer = graphics().createImageLayer(image);
+   public Ball(final Platform plat, final GroupLayer parentLayer, final float x, final float y) {
+       Image image = plat.assets().getImage(IMAGE);
+       layer = new ImageLayer(image);
        pickDirection();
 
-       // Callback for image load
-       image.addCallback(new ResourceCallback<Image>() {
-           @Override
-           public void done(Image image) {
-               layer.setOrigin(image.width() / 2f, image.height() / 2f);
-               layer.setTranslation(x,y);
-               parentLayer.add(layer);
-           }
-
-           @Override
-           public void error(Throwable throwable) {
-               log().error("Error loading image!", throwable);
-           }
-       });
+       layer.setOrigin(image.width() / 2f, image.height() / 2f);
+       layer.setTranslation(x,y);
+       parentLayer.add(layer);
    }
 
-   public void update(float delta) {
+   /*public void update(float delta) {
        Transform t = layer.transform();
        // Check collisions and update accordingly
        if (t.ty() <= 0 + layer.height()/2 || t.ty() >= graphics().height() - layer.height()/2)
@@ -45,7 +33,7 @@ public class Ball {
        t.translateX( direction.x()*1 );
        t.translateY(direction.y()*1);
 
-   }
+   }*/
 
    public Transform getTransform() {
        return layer.transform();

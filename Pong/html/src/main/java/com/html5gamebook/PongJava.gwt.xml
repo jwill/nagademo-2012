@@ -1,0 +1,11 @@
+<module rename-to='Pong'>
+  <inherits name='playn.Scene'/>
+  <inherits name='PongJavaAssets'/>
+
+  <source path='core'/>
+  <source path='html'/>
+
+  <public path="resources" />
+
+  <entry-point class='com.html5gamebook.html.PongJavaHtml'/>
+</module>

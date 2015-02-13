@@ -1,9 +1,11 @@
 package com.html5gamebook.core;
 
 import playn.core.*;
+import playn.scene.ImageLayer;
+import playn.scene.GroupLayer;
+
 import pythagoras.f.Transform;
 
-import static playn.core.PlayN.*;
 
 public class Paddle {
     public static String IMAGE = "images/paddle.png";
@@ -11,28 +13,16 @@ public class Paddle {
     private float height, width;
     private boolean isPlayerOne = true;
 
-    public Paddle(final GroupLayer parentLayer, final float x, final float y) {
-        Image image = assets().getImage(IMAGE);
-        layer = graphics().createImageLayer(image);
+    public Paddle(final Platform plat, final GroupLayer parentLayer, final float x, final float y) {
+        Image image = plat.assets().getImage(IMAGE);
+        layer = new ImageLayer(image);
         final Paddle p = this;
         // Callback for image load
-        image.addCallback(new ResourceCallback<Image>() {
-            @Override
-            public void done(Image image) {
-                layer.setOrigin(image.width() / 2f, image.height() / 2f);
-                layer.setTranslation(x, y);
-                p.height = image.height();
-                p.width = image.width();
-                parentLayer.add(layer);
-            }
-
-            @Override
-            public void error(Throwable throwable) {
-                log().error("Error loading image!", throwable);
-            }
-        });
-
-
+        layer.setOrigin(image.width() / 2f, image.height() / 2f);
+        layer.setTranslation(x, y);
+        p.height = image.height();
+        p.width = image.width();
+        parentLayer.add(layer);
     }
 
     public float getHeight() {
@@ -54,6 +44,6 @@ public class Paddle {
     public float getY() { return this.layer.transform().ty(); };
 
     public void update(float delta) {
-    
+
     }
 }
